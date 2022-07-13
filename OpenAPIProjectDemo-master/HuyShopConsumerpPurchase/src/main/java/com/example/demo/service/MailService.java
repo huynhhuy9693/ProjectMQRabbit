@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 
 import com.example.demo.model.Purchase;
-import com.example.demo.model.User;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
@@ -35,7 +34,7 @@ public class MailService implements RabbitListenerConfigurer {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(purchase.getCartDTO().getEmail());
         mailMessage.setSubject("thank you : " +purchase.getCartDTO().getOderNumber());
-        mailMessage.setText("thanks you " + purchase.getUserOrder().getUserName()+
+        mailMessage.setText("thanks you " + purchase.getCartDTO().getUserOrder().getName()+
                 "-- ToTal price : "+purchase.getCartDTO().getTotalPrice()+
                 "-- Your Order payment "+purchase.getStatus()+
                 "--We will delivery your product in 5 days in " + purchase.getShippingAddress()+

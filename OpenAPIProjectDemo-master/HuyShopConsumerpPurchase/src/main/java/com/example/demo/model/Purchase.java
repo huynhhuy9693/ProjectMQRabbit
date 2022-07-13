@@ -13,7 +13,6 @@ import lombok.Setter;
 public class Purchase {
 
 
-    User userOrder;
     Cart cartDTO;
     String shippingAddress;
     String status;

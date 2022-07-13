@@ -19,21 +19,12 @@ public class CartDTO {
     private String oderNumber;
     private Double totalPrice;
     private String status;
-    private List<CartItemDTO> cartItemDTOList = new LinkedList<>();
+    private List<CartItemDTO> cartItemDTOList;
     private UserOrder userOrder;
     private String shippingAddress;
-    private String userNameOrder;
     private String email;
     private LocalDate dateOrder;
     private Boolean isSending;
 
-//    public void add(CartItemDTO item) {
-//
-//        if (item != null) {
-//            if(cartItemDTOList == null) {
-//                cartItemDTOList = new LinkedList<>();
-//            }
-//        }
-//        item.setCartDTO(this);
-//    }
+
 }

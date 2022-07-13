@@ -13,6 +13,7 @@ public class Cart {
     private String oderNumber;
     private Double totalPrice;
     private String status;
+    private UserOrder userOrder;
     private String shippingAddress;
     private String userNameOrder;
     private String email;

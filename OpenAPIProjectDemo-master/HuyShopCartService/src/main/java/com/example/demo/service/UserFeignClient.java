@@ -11,4 +11,7 @@ public interface UserFeignClient {
 
     @GetMapping(value = "/admin-user/user/{username}")
     UserOrder findByUserName(@PathVariable("username") String userName);
+
+    @GetMapping(value = "/admin-user/users/{id}")
+    UserOrder findById(@PathVariable("id") Long id);
 }

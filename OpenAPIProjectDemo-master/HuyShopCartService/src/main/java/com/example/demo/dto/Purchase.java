@@ -15,9 +15,7 @@ import java.util.Set;
 @Getter
 public class Purchase {
 
-    UserOrder userOrder;
     CartDTO cartDTO;
-//    List<CartItemDTO> cartItemDTOList;
     String shippingAddress;
     String status;
 

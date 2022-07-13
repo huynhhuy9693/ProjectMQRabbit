@@ -1,6 +1,6 @@
 package com.example.demo.facade;
 
-import com.example.demo.service.MailService;
+import com.example.demo.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -8,9 +8,6 @@ import com.example.demo.dto.*;
 import com.example.demo.entity.CartEntity;
 import com.example.demo.entity.CartItemEntity;
 import com.example.demo.repository.CartRepository;
-import com.example.demo.service.CartItemService;
-import com.example.demo.service.MailFeignClient;
-import com.example.demo.service.ProductFeignClient;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +29,9 @@ public class PurchaseFacade {
 
     @Autowired
     MailFeignClient mailFeignClient;
+
+    @Autowired
+    UserFeignClient userFeignClient;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -67,17 +67,21 @@ public class PurchaseFacade {
                 }
             }
         }
-        UserOrder userOrder = purchase.getUserOrder();
-        cartDTO.setUserNameOrder(userOrder.getUserName());
+        UserOrder userOrder = userFeignClient.findById(purchase.getCartDTO().getUserOrder().getId());
+
+        cartDTO.setUserOrder(userOrder);
         cartDTO.setShippingAddress(purchase.getShippingAddress());
         cartDTO.setStatus("DELIVERY");
-        cartDTO.setEmail(purchase.getUserOrder().getEmail());
+        cartDTO.setEmail(purchase.getCartDTO().getUserOrder().getEmail());
         cartDTO.setIsSending(Boolean.FALSE);
+
         //save DB and update quantity in tabble Product
         CartEntity cart = modelMapper.map(cartDTO,CartEntity.class);
+        cart.setUserNameOrder(cartDTO.getUserOrder().getUserName());
 //        List<CartItemEntity> cartItemEntityList = new ArrayList<>();
         for (CartItemDTO cartItemDTO : cartItemDTOList)
         {
+
             CartItemEntity cartItemEntity = modelMapper.map(cartItemDTO,CartItemEntity.class);
 //            cartItemEntityList.add(cartItemEntity);
             cart.add(cartItemEntity);
