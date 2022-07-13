@@ -1,0 +1,46 @@
+server:
+  port: 8085
+
+eureka:
+  client:
+    service-url:
+      default-zone: 'http://localhost:8761/eureka'
+
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: '587'
+    username: huynhhuy362022@gmail.com
+    password: vjqhvxlfwbrzsxpz
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: '5000'
+          timeout: '5000'
+          writetimeout: '5000'
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+  rabbitmq:
+    host: localhost
+    password: guest
+    port: 15672
+    username: guest
+    exchange: mail.exchange
+    queue: mail.queue
+    routingkey: mail.routingkey
+
+  application:
+    name: mail-service
+
+
+#    username: huynhhuy9693@gmail.com
+#    password: cyvnmufgfyvzqtvw
+
+
+app:
+  message: Mail has been sent Successfully...
+

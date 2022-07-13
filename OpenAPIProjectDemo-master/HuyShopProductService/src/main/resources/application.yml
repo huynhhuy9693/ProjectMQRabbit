@@ -1,0 +1,37 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+  application:
+    name: product-service
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+  main:
+    allow-circular-references: true
+
+  datasource:
+    platform: postgresql
+    url: jdbc:postgresql://localhost:5432/HuyShop
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+
+server:
+  port: 8081
+
+eureka:
+  client:
+    service-url:
+      default-zone: 'http://localhost:8761/eureka'
+##clouddinary
+#cloudinary:
+#  cloud_name: '"huyhuynh"'
+#  api_key: '"186243663589179"'
+#  api_secret: '"xIhyZNk6NYFIuMSHRhZP0srJL_k"'

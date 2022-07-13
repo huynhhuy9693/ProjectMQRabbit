@@ -1,0 +1,33 @@
+<!--<!doctype html>-->
+<!--<html lang = xmlns:th="http://www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml">-->
+<!--<th:block th:include="/home"></th:block>-->
+<!--<body>-->
+<!--<th:block th:include="/index"></th:block>-->
+<!--<div class="container">-->
+<!--<h1 align="center">ROLE-LIST</h1>-->
+
+<!--<a class="btn btn-success" th:href="@{/admin_user/create_role}">add new</a>-->
+<!--<table class="table table-bordered table-striped" id="datatable">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>ID</th>-->
+<!--        <th>NAME</th>-->
+<!--        <th>STATUS</th>-->
+<!--        <th>ACTION</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="item : ${roles}">-->
+<!--        <td th:text="${item.id}"></td>-->
+<!--        <td th:text="${item.name} "></td>-->
+<!--        <td th:text="${item.status}? 'Active':'Not Active' "></td>-->
+<!--        <td><a class="btn btn-primary" th:href="@{|/admin_user/role/details/${item.id}|}">update</a>-->
+<!--            &lt;!&ndash;<a class="btn btn-primary" th:href="@{|/admin_user/role/delete/${item.id}|}">delete</a>&ndash;&gt;-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--</div>-->
+<!--</body>-->
+<!--<th:block th:include="/datatable"></th:block>-->
+<!--</html>-->

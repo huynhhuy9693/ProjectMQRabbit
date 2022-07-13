@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/EurekaServer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/EurekaServer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopCartService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerUser/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerUser/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerpPurchase/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerpPurchase/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopMailService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopMailService/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopProductService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopProductService/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopReportService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopReportService/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopSpringGateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopSpringGateway/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopUserService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopUserService/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

@@ -1,0 +1,61 @@
+<!--<!doctype html>-->
+<!--<html lang = xmlns:th="http://www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml">-->
+<!--<th:block th:include="/home"></th:block>-->
+<!--<body>-->
+<!--<th:block th:include="/index"></th:block>-->
+
+<!--<div class="container mt-3">-->
+<!--    <h2>FORM</h2>-->
+<!--    <form th:object="${user}" th:action="@{|/admin_user/user/update/{id}|}" method="post">-->
+<!--        <div class="mb-3 mt-3">-->
+<!--            <label for="id">ID:</label>-->
+<!--            <input type="text" class="form-control" id="id" placeholder="Enter name" th:field="*{id}" readonly="true" >-->
+<!--        </div>-->
+<!--        <div class="mb-3 mt-3">-->
+<!--            <label for="username">USERNAME:</label>-->
+<!--            <input type="text" class="form-control" id="username" placeholder="Enter username" th:field="*{userName}" >-->
+<!--        </div>-->
+<!--        <div class="mb-3 mt-3">-->
+<!--            <label for="password">PASSWORD:</label>-->
+<!--            <input type="text" class="form-control" id="password" placeholder="Enter password" th:field="*{passWord}" >-->
+<!--        </div>-->
+<!--        <div class="mb-3 mt-3">-->
+<!--            <label for="name">NAME:</label>-->
+<!--            <input type="text" class="form-control" id="name" placeholder="Enter quantity" th:field="*{name}" >-->
+<!--        </div>-->
+<!--        <div class="mb-3 mt-3">-->
+<!--            <label for="dob">DAY OF BIRTH:</label>-->
+<!--            <input type="date" class="form-control" id="dob" placeholder="Enter quantity" th:field="*{dob}" >-->
+<!--        </div>-->
+<!--        <div class="mb-3 mt-3">-->
+<!--            <label for="email">EMAIL:</label>-->
+<!--            <input type="email" class="form-control" id="email"  th:field="*{email}" >-->
+<!--        </div>-->
+<!--        <div class="mb-3 mt-3">-->
+<!--            <label for="phone">PHONE:</label>-->
+<!--            <input type="text" class="form-control" id="phone"  th:field="*{phone}" >-->
+<!--        </div>-->
+<!--        <div class="mb-3 mt-3">-->
+<!--            <label for="address">ADDRESS:</label>-->
+<!--            <input type="text" class="form-control" id="address"  th:field="*{address}" >-->
+<!--        </div>-->
+<!--        <div class="mb-3 mt-3">-->
+<!--            <label for="role_id">ROLE:</label>-->
+<!--            <select th:field="*{roleId}" id="role_id" class="form-select" aria-label="Default select example">-->
+<!--                <option th:each="item : ${roles}" th:value="${item.id}" th:text="${item.name}" ></option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <div class="mb-3 mt-3">-->
+<!--            <label for="status">STATUS:</label>-->
+<!--            <select th:field="*{status}" id="status" class="form-select" aria-label="Default select example">-->
+<!--                <option th:value="1" >Active</option>-->
+<!--                <option th:value="0">Not Active</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--        <button type="reset" class="btn btn-danger">Reset</button>-->
+<!--    </form>-->
+<!--    </form>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

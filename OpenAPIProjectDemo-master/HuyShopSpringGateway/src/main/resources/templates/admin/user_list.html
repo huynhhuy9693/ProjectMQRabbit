@@ -1,0 +1,46 @@
+<!--<!doctype html>-->
+<!--<html lang = xmlns:th="http://www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml">-->
+<!--<th:block th:include="/home"></th:block>-->
+<!--<body>-->
+<!--<th:block th:include="/index"></th:block>-->
+<!--<div class="container">-->
+<!--<h1 align="center">USER-LIST</h1>-->
+<!--<a class="btn btn-success" th:href="@{/admin_user/create_user}">add new</a>-->
+<!--<table class="table table-bordered table-striped" id="datatable">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <td>ID</td>-->
+<!--        <td>NAME</td>-->
+<!--        <td>DOB</td>-->
+<!--        <td>PHONE</td>-->
+<!--        <td>EMAIL</td>-->
+<!--        <td>ADDRESS</td>-->
+<!--        <td>USERNAME</td>-->
+<!--        <td>PASSWORD</td>-->
+<!--        <td>STATUS</td>-->
+<!--        <td>ROLE</td>-->
+<!--        <td>ACTION</td>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="item : ${users}">-->
+<!--        <td th:text="${item.id}"></td>-->
+<!--        <td th:text="${item.name} "></td>-->
+<!--        <td th:text="${item.dob} "></td>-->
+<!--        <td th:text="${item.phone} "></td>-->
+<!--        <td th:text="${item.email} "></td>-->
+<!--        <td th:text="${item.address}"></td>-->
+<!--        <td th:text="${item.userName}"></td>-->
+<!--        <td th:text="${item.passWord}"></td>-->
+<!--        <td th:text="${item.status}? 'Active':'Not Active' "></td>-->
+<!--        <td th:text="${item.roleId.name}"></td>-->
+<!--        <td><a class="btn btn-primary" th:href="@{|/admin_user/user/details/${item.id}|}">update</a>-->
+<!--            &lt;!&ndash;<a class="btn btn-primary" th:href="@{|/admin_user/user/delete/${item.id}|}">delete</a>&ndash;&gt;-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--</div>-->
+<!--</body>-->
+<!--<th:block th:include="/datatable"></th:block>-->
+<!--</html>-->

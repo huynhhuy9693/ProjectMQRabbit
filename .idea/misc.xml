@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/EurekaServer/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopCartService/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopMailService/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopUserService/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerMail/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopReportService/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopSpringGateway/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopProductService/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerUser/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerpPurchase/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="ProjectType">
+    <option name="id" value="jpab" />
+  </component>
+</project>

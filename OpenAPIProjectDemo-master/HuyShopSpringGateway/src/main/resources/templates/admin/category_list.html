@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang=xmlns:th="http://www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.w3.org/1999/html">
+<th:block th:include="/home"></th:block>
+<body>
+<th:block th:include="/index"></th:block>
+<div class="container">
+<h1 align="center">CATEGORY-LIST</h1>
+<a class="btn btn-primary" th:href="@{/admin_product/create_category}">add new </a>
+<table class="table table-bordered table-striped" id="datatable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>STATUS</th>
+        <th>ACTIONS</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item: ${categories}">
+        <td th:text="${item.id}" />
+        <td th:text="${item.name}" />
+        <td th:text="${item.status}?'Active':'Not Active'" />
+        <td>
+            <a class="btn btn-primary" th:href="@{|/admin_product/category/details/${item.id}|}">update</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</body>
+<th:block th:include="/datatable"></th:block>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang = xmlns:th="http://www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml">
+<th:block th:include="/home"></th:block>
+<body>
+<th:block th:include="/index"></th:block>
+
+<div class="container mt-3">
+    <h2>FORM</h2>
+    <form th:object="${category}" th:action="@{|/admin_product/category/update/{id}|}" method="post">
+        <div class="mb-3 mt-3">
+            <label for="id">ID:</label>
+            <input type="text" class="form-control" id="id" placeholder="Enter name" th:field="*{id}" readonly="true" >
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="name">NAME:</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter name" th:field="*{name}" >
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="status">STATUS:</label>
+            <select th:field="*{status}" id="status" class="form-select" aria-label="Default select example">
+                <option th:value="1" >Active</option>
+                <option th:value="0">Not Active</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="reset" class="btn btn-danger">Reset</button>
+    </form>
+</div>
+</body>
+</html>

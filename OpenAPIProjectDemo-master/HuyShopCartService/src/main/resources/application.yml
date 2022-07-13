@@ -1,0 +1,67 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+
+  rabbitmq:
+    host: localhost
+    password: guest
+    port: 15672
+    username: guest
+    exchange: purcharse.exchange
+    queue: purcharse.queue
+    routingkey: purcharse.routingkey
+
+  mail:
+    host: smtp.gmail.com
+    port: '587'
+    username: huynhhuy9693@gmail.com
+    password: cyvnmufgfyvzqtvw
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: '5000'
+          timeout: '5000'
+          writetimeout: '5000'
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  application:
+    name: cart-service
+#  jackson:
+#    serialization:
+#      write-dates-as-timestamps: false
+
+
+  datasource:
+    platform: postgresql
+    url: jdbc:postgresql://localhost:5432/HuyShop
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+
+server:
+  port: 8083
+
+eureka:
+  client:
+    service-url:
+      default-zone: 'http://localhost:8761/eureka'
+
+
+#    username: huynhhuy362022@gmail.com
+#    password: vjqhvxlfwbrzsxpz
+
+#    username: huynhhuy9693@gmail.com
+#    password: cyvnmufgfyvzqtvw
