@@ -277,6 +277,10 @@ components:
           type: string
         isSending:
           type: boolean
+        userOrder:
+            type: string
+        voucher:
+            type: string
     CartItem:
       description: This is Cart-Item Model
       type: object

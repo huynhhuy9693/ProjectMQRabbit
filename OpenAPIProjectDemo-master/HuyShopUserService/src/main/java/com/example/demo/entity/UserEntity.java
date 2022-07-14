@@ -1,10 +1,8 @@
 package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
@@ -15,6 +13,7 @@ import java.time.LocalDate;
 @Builder
 @Table(name = "user_tb")
 public class UserEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -36,7 +35,6 @@ public class UserEntity {
     private String userName;
     @Column(name = "pass_word")
     private String passWord;
-
     @ManyToOne
     @JoinColumn(name = "role_id")
     private RoleEntity roleId;

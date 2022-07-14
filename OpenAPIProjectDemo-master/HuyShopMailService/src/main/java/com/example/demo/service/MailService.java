@@ -55,7 +55,7 @@ public class MailService {
         rabbitTemplate.convertAndSend(exchange,routingkey,mailMessage);
     }
 
-    @Scheduled(cron = "0 0 8 * * ?")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void sendMailBeforeOneDayDelievery()
     {
         List<Cart> cartList = mailServiceFeignClientPurchase.findByOrderDate(LocalDate.now().minusDays(4));
@@ -66,7 +66,7 @@ public class MailService {
                 mailMessage.setTo(cart.getEmail());
                 mailMessage.setSubject("thank you : " + cart.getOderNumber());
                 mailMessage.setText("Your product will be delivered tomorrow!! Please check your phone ---Thank");
-                rabbitTemplate.convertAndSend(exchange,routingkey,mailMessage);
+                javaMailSender.send(mailMessage);
                 mailServiceFeignClientPurchase.updateIsSendingTrue(true, cart.getOderNumber());
             }
         }

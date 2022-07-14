@@ -21,7 +21,7 @@ public class MailService {
     @Value("${spring.rabbitmq.routingkey}")
     private String routingkey;
 
-    public void sendMailPurchaseSuccsess(String orderNumber, Purchase purchase)
+    public void sendMailPurchaseSuccsess( Purchase purchase)
     {
         //Gson convert String -> Object
 //        Gson gson = new Gson();

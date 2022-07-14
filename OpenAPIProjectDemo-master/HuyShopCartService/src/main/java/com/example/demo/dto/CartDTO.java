@@ -22,9 +22,9 @@ public class CartDTO {
     private List<CartItemDTO> cartItemDTOList;
     private UserOrder userOrder;
     private String shippingAddress;
-    private String email;
-    private LocalDate dateOrder;
+    private String email;;
     private Boolean isSending;
+    private VoucherDTO voucherDTO;
 
 
 }

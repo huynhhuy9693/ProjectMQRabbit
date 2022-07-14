@@ -40,6 +40,9 @@ public class PurchaseFacade {
     private CartItemService cartItemService;
 
     @Autowired
+    PromotionFeignClient promotionFeignClient;
+
+    @Autowired
     MailService mailService;
 
     private static final String digits = "0123456789";
@@ -74,35 +77,42 @@ public class PurchaseFacade {
         cartDTO.setStatus("DELIVERY");
         cartDTO.setEmail(purchase.getCartDTO().getUserOrder().getEmail());
         cartDTO.setIsSending(Boolean.FALSE);
+        cartDTO.setTotalPrice(priceAfterPromotion(purchase));
+
 
         //save DB and update quantity in tabble Product
         CartEntity cart = modelMapper.map(cartDTO,CartEntity.class);
         cart.setUserNameOrder(cartDTO.getUserOrder().getUserName());
-//        List<CartItemEntity> cartItemEntityList = new ArrayList<>();
+
+        if(promotionFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName())==null)
+        {
+            cart.setVoucher("NO-VOUCHER");
+        }else
+        {
+            cart.setVoucher(purchase.getCartDTO().getVoucherDTO().getName().toUpperCase());
+        }
+
         for (CartItemDTO cartItemDTO : cartItemDTOList)
         {
-
             CartItemEntity cartItemEntity = modelMapper.map(cartItemDTO,CartItemEntity.class);
-//            cartItemEntityList.add(cartItemEntity);
             cart.add(cartItemEntity);
             int quantity = cartItemDTO.getQuantity();
-//            System.out.println(quantity);
             int quantityShop = productFeignClient.getQuantityById(cartItemDTO.getProductId());
-//            System.out.println(quantityShop);
             int result = (quantityShop-quantity);
-//            System.out.println(result);
             productFeignClient.updateProductQuantityForId(result, cartItemDTO.getProductId());
         }
+
         LocalDate localDate = LocalDate.now();
         cart.setDateOrder(localDate);
         repository.save(cart);
         purchase.setStatus("SUCCESS");
+
         // ObjectWriter convert object -> String (jSon)
-        ObjectWriter obj = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String jsonPurchase = obj.writeValueAsString(purchase);
+//        ObjectWriter obj = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//        String jsonPurchase = obj.writeValueAsString(purchase);
 
         try{
-            mailService.sendMailPurchaseSuccsess(oderNumber,purchase);
+            mailService.sendMailPurchaseSuccsess(purchase);
 
         }catch (Exception e)
         {
@@ -123,5 +133,24 @@ public class PurchaseFacade {
     }
     private  int randomNumber(int min, int max) {
         return generator.nextInt((max - min) + 1) + min;
+    }
+
+    public Double priceAfterPromotion(Purchase purchase) {
+        Double totalPrice = purchase.getCartDTO().getTotalPrice();
+            if(!purchase.getCartDTO().getVoucherDTO().getName().isEmpty())
+                {
+                VoucherDTO voucher = promotionFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName());
+                if(voucher!=null)
+                {
+                    if (voucher.getId()==1)
+                    {
+                        return totalPrice*30/100;
+                    }else if(voucher.getId()==2)
+                    {
+                        return totalPrice*50/100;
+                    }
+                }
+            }
+            return totalPrice;
     }
 }

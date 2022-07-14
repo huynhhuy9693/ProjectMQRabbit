@@ -1,0 +1,27 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+
+  application:
+    name: promotion-service
+
+  datasource:
+    platform: postgresql
+    url: jdbc:postgresql://localhost:5432/HuyShop
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+
+server:
+  port: 8086
+
+  eureka:
+    client:
+      service-url:
+        default-zone: 'http://localhost:8761/eureka'

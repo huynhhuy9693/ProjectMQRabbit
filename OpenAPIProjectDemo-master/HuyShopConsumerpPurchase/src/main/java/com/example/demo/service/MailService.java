@@ -41,7 +41,5 @@ public class MailService implements RabbitListenerConfigurer {
                 "-- Please check invoice details and status in website -- thank you and see your later"
         );
         mailSender.send(mailMessage);
-
     }
-
 }
