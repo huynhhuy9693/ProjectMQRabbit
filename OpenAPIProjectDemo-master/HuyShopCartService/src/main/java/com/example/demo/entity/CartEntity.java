@@ -39,6 +39,7 @@ public class CartEntity {
     private String email;
     private Boolean isSending;
     private String voucher;
+    private String payment;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartEntity")

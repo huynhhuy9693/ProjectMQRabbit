@@ -2,8 +2,6 @@ package com.example.demo.facade;
 
 import com.example.demo.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.example.demo.dto.*;
 import com.example.demo.entity.CartEntity;
 import com.example.demo.entity.CartItemEntity;
@@ -16,7 +14,6 @@ import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
@@ -40,7 +37,7 @@ public class PurchaseFacade {
     private CartItemService cartItemService;
 
     @Autowired
-    PromotionFeignClient promotionFeignClient;
+    PaymentFeignClient paymentFeignClient;
 
     @Autowired
     MailService mailService;
@@ -84,15 +81,9 @@ public class PurchaseFacade {
         CartEntity cart = modelMapper.map(cartDTO,CartEntity.class);
         cart.setUserNameOrder(cartDTO.getUserOrder().getUserName());
 
-        if(promotionFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName())==null)
-        {
-            cart.setVoucher("NO-VOUCHER");
-        }else
-        {
-            cart.setVoucher(purchase.getCartDTO().getVoucherDTO().getName().toUpperCase());
-        }
+        checkPromotion(purchase,cart);
 
-        for (CartItemDTO cartItemDTO : cartItemDTOList)
+            for (CartItemDTO cartItemDTO : cartItemDTOList)
         {
             CartItemEntity cartItemEntity = modelMapper.map(cartItemDTO,CartItemEntity.class);
             cart.add(cartItemEntity);
@@ -137,20 +128,68 @@ public class PurchaseFacade {
 
     public Double priceAfterPromotion(Purchase purchase) {
         Double totalPrice = purchase.getCartDTO().getTotalPrice();
+        VoucherDTO voucher = paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName());
+        PaymentDTO payment = paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName());
+                // if user enter voucher
             if(!purchase.getCartDTO().getVoucherDTO().getName().isEmpty())
                 {
-                VoucherDTO voucher = promotionFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName());
+                    //if voucher equal voucher DB
                 if(voucher!=null)
                 {
                     if (voucher.getId()==1)
                     {
-                        return totalPrice*30/100;
+                        // discount 30% - HELLO VOUCHER
+                        return totalPrice*0.7;
                     }else if(voucher.getId()==2)
                     {
-                        return totalPrice*50/100;
+                        //discount 50% - NEWUSER VOUCHER
+                        return totalPrice*0.5;
+                    }
+                }
+
+            }
+            //if user payment by some payment in payment DB and not use voucher
+            if(!purchase.getCartDTO().getPaymentDTO().getName().isEmpty())
+            {
+                if(payment!=null)
+                {
+                    if(payment.getId()==1)
+                    {
+                        //discount 5% -VISA
+                        return totalPrice*0.95;
+                    } else if (payment.getId()==2) {
+                        //discount 10% -PAYPAL
+                        return totalPrice*0.9;
+                    } else if (payment.getId()==3) {
+                        //discount 20% -MOMO
+                        return totalPrice*0.8;
                     }
                 }
             }
             return totalPrice;
+    }
+
+    public void checkPromotion(Purchase purchase, CartEntity cart)
+    {
+        if(paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName())==null
+                &&(paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName())==null))
+        {
+            cart.setVoucher(("NO-VOUCHER").toUpperCase());
+            cart.setPayment(("ATM").toUpperCase());
+        } else if (paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName())!=null
+                &&(paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName())==null))
+        {
+            cart.setVoucher(purchase.getCartDTO().getVoucherDTO().getName().toUpperCase());
+            cart.setPayment(("ATM").toUpperCase());
+        }else if (paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName())==null
+                &&(paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName())!=null))
+        {
+            cart.setVoucher("NO-VOUCHER");
+            cart.setPayment(purchase.getCartDTO().getPaymentDTO().getName().toUpperCase());
+        }else
+        {
+            cart.setVoucher(purchase.getCartDTO().getVoucherDTO().getName().toUpperCase());
+            cart.setPayment("ATM");
+        }
     }
 }

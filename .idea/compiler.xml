@@ -15,8 +15,8 @@
         <module name="demo (5)" />
         <module name="demo (8)" />
         <module name="demo (7)" />
-        <module name="demo" />
         <module name="demo (9)" />
+        <module name="demo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

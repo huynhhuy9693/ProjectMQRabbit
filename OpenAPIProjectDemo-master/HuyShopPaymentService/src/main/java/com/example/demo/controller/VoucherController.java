@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.PaymentDTO;
 import com.example.demo.dto.VoucherDTO;
+import com.example.demo.service.PaymentService;
 import com.example.demo.service.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,9 @@ public class VoucherController {
 
     @Autowired
     VoucherService voucherService;
+
+    @Autowired
+    PaymentService paymentService;
 
 
     @GetMapping(value = "/all")
@@ -57,4 +62,6 @@ public class VoucherController {
     {
         voucherService.delete(id);
     }
+
+
 }

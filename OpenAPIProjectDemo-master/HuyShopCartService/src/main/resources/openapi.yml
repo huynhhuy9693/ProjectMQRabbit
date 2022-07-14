@@ -281,6 +281,8 @@ components:
             type: string
         voucher:
             type: string
+        payment:
+            type: string
     CartItem:
       description: This is Cart-Item Model
       type: object
