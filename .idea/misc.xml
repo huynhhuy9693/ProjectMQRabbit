@@ -14,6 +14,7 @@
         <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerUser/pom.xml" />
         <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerpPurchase/pom.xml" />
         <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopPromotionService/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopPaymentService/pom.xml" />
       </list>
     </option>
   </component>

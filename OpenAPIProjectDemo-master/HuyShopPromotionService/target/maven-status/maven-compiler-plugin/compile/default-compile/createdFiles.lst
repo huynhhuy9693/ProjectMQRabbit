@@ -1,0 +1,6 @@
+com\example\demo\HuyShopPromotionServiceApplication.class
+com\example\demo\entity\Voucher.class
+com\example\demo\repository\VoucherRepository.class
+com\example\demo\entity\Voucher$VoucherBuilder.class
+com\example\demo\dto\VoucherDTO$VoucherDTOBuilder.class
+com\example\demo\dto\VoucherDTO.class

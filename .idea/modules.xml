@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/OpenAPIProjectDemo-master.iml" filepath="$PROJECT_DIR$/.idea/OpenAPIProjectDemo-master.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopPromotionService/demo.iml" filepath="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopPromotionService/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopPaymentService/demo.iml" filepath="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopPaymentService/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/EurekaServer/demo (1).iml" filepath="$PROJECT_DIR$/OpenAPIProjectDemo-master/EurekaServer/demo (1).iml" />
       <module fileurl="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopCartService/demo (2).iml" filepath="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopCartService/demo (2).iml" />
       <module fileurl="file://$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerpPurchase/demo (3).iml" filepath="$PROJECT_DIR$/OpenAPIProjectDemo-master/HuyShopConsumerpPurchase/demo (3).iml" />

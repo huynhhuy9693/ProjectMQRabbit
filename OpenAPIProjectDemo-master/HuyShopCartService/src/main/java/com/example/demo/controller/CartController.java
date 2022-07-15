@@ -42,6 +42,7 @@ public class CartController {
         return new ResponseEntity<>(cartService.findByOrderNumber(orderNumber), HttpStatus.OK);
     }
 
+    //update status in cart DB
     @PutMapping(value = "/{status}/{orderNumber}")
     public ResponseEntity<Integer> updateStatusByOrdernumber(@PathVariable("status") String status, @PathVariable("orderNumber") String orderNumber)
     {
@@ -63,6 +64,7 @@ public class CartController {
         return new ResponseEntity<>(cartList,HttpStatus.OK);
 
     }
+    //update is-sending in cart DB
     @PutMapping(value = "/is-sending/{isSending}/{orderNumber}")
     public ResponseEntity<Integer> updateIsSendingTrue(@PathVariable("isSending") Boolean isSending, @PathVariable("orderNumber") String orderNumber)
     {

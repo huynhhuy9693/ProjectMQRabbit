@@ -43,22 +43,27 @@ public class PurchaseFacade {
     MailService mailService;
 
     private static final String digits = "0123456789";
-    private static final String ALPHA_NUMERIC =  digits;
+    private static final String ALPHA_NUMERIC = digits;
     private static Random generator = new Random();
+
+    private static final String NO_VOUCHER = "NO-VOUCHER";
+    private static final String NO_PAYMENT = "ATM";
+
     public PurchaseResponse placeOrder(Purchase purchase) throws MalformedURLException, MessagingException, UnsupportedEncodingException, JsonProcessingException {
 
         int numberOfCharactor = 6;
+
         CartDTO cartDTO = purchase.getCartDTO();
 
         String oderNumber = generateOrderNumber(numberOfCharactor);
         cartDTO.setOderNumber(oderNumber);
 
         List<CartItemDTO> cartItemDTOList = purchase.getCartDTO().getCartItemDTOList();
-        cartDTO.setCartItemDTOList(cartItemDTOList);
+//        cartDTO.setCartItemDTOList(cartItemDTOList);
 
         // check quantity purchase -> quantity shop
-        for (int i =0;i<cartItemDTOList.size();i++)
-        {
+        //if quantity purchase > quantity shop -> remove out of cartItem
+        for (int i = 0; i < cartItemDTOList.size(); i++) {
             int quantity = productFeignClient.getQuantityById(cartItemDTOList.get(i).getProductId());
             {
                 if (quantity < cartItemDTOList.get(i).getQuantity()) {
@@ -74,22 +79,21 @@ public class PurchaseFacade {
         cartDTO.setStatus("DELIVERY");
         cartDTO.setEmail(purchase.getCartDTO().getUserOrder().getEmail());
         cartDTO.setIsSending(Boolean.FALSE);
-        cartDTO.setTotalPrice(priceAfterPromotion(purchase));
+        cartDTO.setTotalPrice(checkTotalPrice(purchase));
 
 
         //save DB and update quantity in tabble Product
-        CartEntity cart = modelMapper.map(cartDTO,CartEntity.class);
+        CartEntity cart = modelMapper.map(cartDTO, CartEntity.class);
         cart.setUserNameOrder(cartDTO.getUserOrder().getUserName());
 
-        checkPromotion(purchase,cart);
+        checkPromotion(purchase, cart);
 
-            for (CartItemDTO cartItemDTO : cartItemDTOList)
-        {
-            CartItemEntity cartItemEntity = modelMapper.map(cartItemDTO,CartItemEntity.class);
+        for (CartItemDTO cartItemDTO : cartItemDTOList) {
+            CartItemEntity cartItemEntity = modelMapper.map(cartItemDTO, CartItemEntity.class);
             cart.add(cartItemEntity);
             int quantity = cartItemDTO.getQuantity();
             int quantityShop = productFeignClient.getQuantityById(cartItemDTO.getProductId());
-            int result = (quantityShop-quantity);
+            int result = (quantityShop - quantity);
             productFeignClient.updateProductQuantityForId(result, cartItemDTO.getProductId());
         }
 
@@ -102,11 +106,10 @@ public class PurchaseFacade {
 //        ObjectWriter obj = new ObjectMapper().writer().withDefaultPrettyPrinter();
 //        String jsonPurchase = obj.writeValueAsString(purchase);
 
-        try{
+        try {
             mailService.sendMailPurchaseSuccsess(purchase);
 
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return new PurchaseResponse(oderNumber);
@@ -122,74 +125,90 @@ public class PurchaseFacade {
         }
         return sb.toString();
     }
-    private  int randomNumber(int min, int max) {
+
+    private int randomNumber(int min, int max) {
         return generator.nextInt((max - min) + 1) + min;
     }
 
-    public Double priceAfterPromotion(Purchase purchase) {
+    public Double priceAfterVoucher(Purchase purchase) {
         Double totalPrice = purchase.getCartDTO().getTotalPrice();
         VoucherDTO voucher = paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName());
-        PaymentDTO payment = paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName());
-                // if user enter voucher
-            if(!purchase.getCartDTO().getVoucherDTO().getName().isEmpty())
-                {
-                    //if voucher equal voucher DB
-                if(voucher!=null)
-                {
-                    if (voucher.getId()==1)
-                    {
-                        // discount 30% - HELLO VOUCHER
-                        return totalPrice*0.7;
-                    }else if(voucher.getId()==2)
-                    {
-                        //discount 50% - NEWUSER VOUCHER
-                        return totalPrice*0.5;
-                    }
-                }
 
-            }
-            //if user payment by some payment in payment DB and not use voucher
-            if(!purchase.getCartDTO().getPaymentDTO().getName().isEmpty())
-            {
-                if(payment!=null)
-                {
-                    if(payment.getId()==1)
-                    {
-                        //discount 5% -VISA
-                        return totalPrice*0.95;
-                    } else if (payment.getId()==2) {
-                        //discount 10% -PAYPAL
-                        return totalPrice*0.9;
-                    } else if (payment.getId()==3) {
-                        //discount 20% -MOMO
-                        return totalPrice*0.8;
-                    }
+        // if user enter voucher
+        if (!purchase.getCartDTO().getVoucherDTO().getName().isEmpty()) {
+            //if voucher equal voucher DB
+            if (voucher != null) {
+                if (voucher.getId() == 1) {
+                    // discount 30% - HELLO VOUCHER
+                    return totalPrice * 0.7;
+                } else if (voucher.getId() == 2) {
+                    //discount 50% - NEWUSER VOUCHER
+                    return totalPrice * 0.5;
                 }
             }
-            return totalPrice;
+
+        }
+        return totalPrice;
     }
 
-    public void checkPromotion(Purchase purchase, CartEntity cart)
-    {
-        if(paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName())==null
-                &&(paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName())==null))
-        {
-            cart.setVoucher(("NO-VOUCHER").toUpperCase());
-            cart.setPayment(("ATM").toUpperCase());
-        } else if (paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName())!=null
-                &&(paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName())==null))
-        {
+    public Double priceAfterPayment(Purchase purchase) {
+        Double totalPrice = purchase.getCartDTO().getTotalPrice();
+        PaymentDTO payment = paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName());
+        //if user payment by some payment in payment DB and not use voucher
+        if (!purchase.getCartDTO().getPaymentDTO().getName().isEmpty()) {
+            if (payment != null) {
+                if (payment.getId() == 1) {
+                    //discount 5% -VISA
+                    return totalPrice * 0.95;
+                } else if (payment.getId() == 2) {
+                    //discount 10% -PAYPAL
+                    return totalPrice * 0.9;
+                } else if (payment.getId() == 3) {
+                    //discount 80% -MOMO
+                    return totalPrice * 0.2;
+                }
+            }
+        }
+        return totalPrice;
+    }
+
+    public Double checkTotalPrice(Purchase purchase) {
+        if (priceAfterVoucher(purchase) >= priceAfterPayment(purchase)) {
+            return priceAfterPayment(purchase);
+        }
+        return priceAfterVoucher(purchase);
+    }
+
+    public void checkPromotion(Purchase purchase, CartEntity cart) {
+        VoucherDTO voucherDTO = paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName());
+        PaymentDTO paymentDTO = paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName());
+        //null voucher and payment
+        if (voucherDTO == null && paymentDTO == null) {
+            cart.setVoucher(NO_VOUCHER);
+            cart.setPayment(NO_PAYMENT);
+        }
+        //null payment - use voucher
+        else if (voucherDTO != null && paymentDTO == null) {
             cart.setVoucher(purchase.getCartDTO().getVoucherDTO().getName().toUpperCase());
-            cart.setPayment(("ATM").toUpperCase());
-        }else if (paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName())==null
-                &&(paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName())!=null))
-        {
-            cart.setVoucher("NO-VOUCHER");
+            cart.setPayment(NO_PAYMENT);
+        }
+        //voucher null - use payment
+        else if (voucherDTO == null && paymentDTO != null) {
+            cart.setVoucher(NO_VOUCHER);
             cart.setPayment(purchase.getCartDTO().getPaymentDTO().getName().toUpperCase());
-        }else
-        {
+        } //price of payment <= price of voucher
+        else if (priceAfterVoucher(purchase) >= priceAfterPayment(purchase)) {
+            cart.setVoucher(NO_VOUCHER);
+            cart.setPayment(purchase.getCartDTO().getPaymentDTO().getName().toUpperCase());
+        } //price of payment <= price of voucher
+        else if (priceAfterVoucher(purchase) <= priceAfterPayment(purchase)) {
             cart.setVoucher(purchase.getCartDTO().getVoucherDTO().getName().toUpperCase());
-            cart.setPayment("ATM");
+            cart.setPayment(NO_PAYMENT);
+        }
+        // else
+        else {
+            cart.setVoucher(purchase.getCartDTO().getVoucherDTO().getName().toUpperCase());
+            cart.setPayment(NO_PAYMENT);
         }
     }
 }
