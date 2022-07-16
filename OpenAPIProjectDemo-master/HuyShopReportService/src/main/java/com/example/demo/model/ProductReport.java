@@ -21,11 +21,6 @@ public class ProductReport {
         private int sold;
         private int quantityPresent;
 
-//        @PrePersist
-//        void onPrePersist() {
-//                if (quantity_sold == 0) {
-//                        status=true;
-//                }
-//        }
+
 
 }

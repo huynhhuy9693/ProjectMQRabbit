@@ -52,6 +52,7 @@ public class PurchaseFacade {
     public PurchaseResponse placeOrder(Purchase purchase) throws MalformedURLException, MessagingException, UnsupportedEncodingException, JsonProcessingException {
 
         int numberOfCharactor = 6;
+        Double totalPrice = 0D;
 
         CartDTO cartDTO = purchase.getCartDTO();
 
@@ -59,19 +60,27 @@ public class PurchaseFacade {
         cartDTO.setOderNumber(oderNumber);
 
         List<CartItemDTO> cartItemDTOList = purchase.getCartDTO().getCartItemDTOList();
-//        cartDTO.setCartItemDTOList(cartItemDTOList);
+
 
         // check quantity purchase -> quantity shop
         //if quantity purchase > quantity shop -> remove out of cartItem
+        //else set total-price
         for (int i = 0; i < cartItemDTOList.size(); i++) {
             int quantity = productFeignClient.getQuantityById(cartItemDTOList.get(i).getProductId());
             {
                 if (quantity < cartItemDTOList.get(i).getQuantity()) {
                     cartItemDTOList.remove(cartItemDTOList.get(i));
                     i--;
+                }else
+                {
+                    totalPrice=Double.valueOf(cartItemDTOList.get(i).getPrice()*cartItemDTOList.get(i).getQuantity());
                 }
             }
         }
+
+
+        cartDTO.setTotalPrice(totalPrice);
+
         UserOrder userOrder = userFeignClient.findById(purchase.getCartDTO().getUserOrder().getId());
 
         cartDTO.setUserOrder(userOrder);
