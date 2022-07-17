@@ -76,25 +76,27 @@ public class CartService {
     public List<Cart> findByOrderDate(LocalDate orderDate)
     {
         List<CartEntity> cartEntityList = repository.findByDateOrder(orderDate);
-        List<Cart> cartList = new ArrayList<>();
-        for (CartEntity c:cartEntityList)
-        {
-            Cart cart = modelMapper.map(c, Cart.class);
-            cartList.add(cart);
-        }
+        List<Cart> cartList =  cartEntityList.stream().map(item->modelMapper.map(item,Cart.class)).collect(Collectors.toList());
         return cartList;
     }
 
     public List<Cart> findByIsSending()
     {
         List<CartEntity> cartEntityList = repository.findByIsSendingFalse();
-        List<Cart> cartList = new ArrayList<>();
-        for (CartEntity c: cartEntityList) {
-            Cart cart = modelMapper.map(c, Cart.class);
-            cartList.add(cart);
-        }
+        List<Cart> cartList  = cartEntityList.stream().map(item->modelMapper.map(item,Cart.class)).collect(Collectors.toList());
+        return cartList;
+    }
+    public List<Cart> findByDateOrderBetween(LocalDate startDate, LocalDate lastDate )
+    {
+        List<CartEntity> cartEntityList = repository.findByDateOrderBetween(startDate,lastDate);
+        List<Cart> cartList = cartEntityList.stream().map(item->modelMapper.map(item,Cart.class)).collect(Collectors.toList());
         return cartList;
     }
 
+    public Long sumTotalPriceBetwenn(LocalDate startDate, LocalDate lastDate)
+    {
+        Long result = repository.sumByDateOrderBetween(startDate,lastDate);
+        return result;
+    }
 
 }

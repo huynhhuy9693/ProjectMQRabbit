@@ -50,20 +50,7 @@ public class CartController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
-    @GetMapping(value = "/order-date/{orderDate}")
-    public ResponseEntity<List<Cart>> findByOrderDate(@PathVariable("orderDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate orderDate)
-    {
-        System.out.println("a");
-        return new ResponseEntity<>(cartService.findByOrderDate(orderDate),HttpStatus.OK);
-    }
 
-    @GetMapping(value = "/is-sending")
-    public ResponseEntity<List<Cart>> findByIsSending()
-    {
-        List<Cart> cartList = cartService.findByIsSending();
-        return new ResponseEntity<>(cartList,HttpStatus.OK);
-
-    }
     //update is-sending in cart DB
     @PutMapping(value = "/is-sending/{isSending}/{orderNumber}")
     public ResponseEntity<Integer> updateIsSendingTrue(@PathVariable("isSending") Boolean isSending, @PathVariable("orderNumber") String orderNumber)

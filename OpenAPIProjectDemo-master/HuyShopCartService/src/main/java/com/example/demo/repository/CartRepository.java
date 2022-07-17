@@ -1,10 +1,13 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.CartEntity;
+import com.example.demo.model.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,4 +37,9 @@ CartRepository extends JpaRepository<CartEntity,Long> {
     Integer updateIsSendingTrue(@Param("isSending") Boolean isSending,@Param("orderNumber") String orderNumber);
 
 
+    @Query("SELECT c FROM CartEntity c WHERE c.dateOrder BETWEEN :startDay AND :lastDay ")
+    List<CartEntity> findByDateOrderBetween(@Param("startDay") LocalDate startDay , @Param("lastDay") LocalDate lastDay);
+
+    @Query("SELECT SUM(c.totalPrice) FROM CartEntity c WHERE c.dateOrder BETWEEN :startDay AND :lastDay ")
+    Long  sumByDateOrderBetween(@Param("startDay") LocalDate startDay , @Param("lastDay") LocalDate lastDay);
 }

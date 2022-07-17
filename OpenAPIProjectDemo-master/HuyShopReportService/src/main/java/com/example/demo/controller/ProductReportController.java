@@ -49,6 +49,8 @@ public class ProductReportController {
                         .append(product.getQuantityPresent()).append(",")
                         .append(product.isStatus()?"Active":"In-Active").append("\n");
             }
+
+
             String fileName ="C:\\Users\\huy.huynh\\dowloadProdect\\productreport.csv";
 
             FileWriter fileWriter = new FileWriter(fileName);

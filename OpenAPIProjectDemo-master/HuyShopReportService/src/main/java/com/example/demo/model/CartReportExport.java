@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -25,10 +26,13 @@ import java.util.List;
 public class CartReportExport {
 
     List<CartReport> cartReports;
-    Double totalPrice;
+    String totalPrice;
+    int month;
 
-
-
+    public CartReportExport(List<CartReport> cartReports, String totalPrice) {
+        this.cartReports = cartReports;
+        this.totalPrice = totalPrice;
+    }
 
     public void writeTableHeader(PdfPTable table)
     {
@@ -79,10 +83,11 @@ public class CartReportExport {
         font.setSize(18);
         font.setColor(Color.BLUE);
 
-        Paragraph p = new Paragraph("CART_REPORT----TOTAL-PRICE: "+totalPrice ,font);
+        document.add(new Paragraph("MONTH : " + (month!=0? month:" "),font));
+        Paragraph p = new Paragraph("CART_REPORT: ",font);
         p.setAlignment(Paragraph.ALIGN_CENTER);
-
         document.add(p);
+
 
         PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(100f);
@@ -91,9 +96,8 @@ public class CartReportExport {
 
         writeTableHeader(table);
         writeTableData(table);
-
         document.add(table);
-
+        document.add(new Paragraph("TOTAL-PRICE : " +totalPrice,font));
         document.close();
     }
 

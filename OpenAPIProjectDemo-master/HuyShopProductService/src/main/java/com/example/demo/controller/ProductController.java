@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class ProductController implements ProductApi {
     public ResponseEntity<Product> createProduct(
             @Parameter(name = "Product", description = "create new product", required = true)
             @Valid @RequestBody Product product
-    ) {
+    ) throws IOException {
         if(service.save(product)==null)
         {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -61,7 +62,7 @@ public class ProductController implements ProductApi {
     public ResponseEntity<Product> updateProduct(
             @Parameter(name = "id", description = "ID of category to return", required = true) @PathVariable("id") Long id,
             @Parameter(name = "Product", description = "update product", required = true) @Valid @RequestBody Product product
-    ) {
+    ) throws IOException {
         service.findById(id);
         return new ResponseEntity<>(service.save(product),HttpStatus.OK);
     }
