@@ -78,10 +78,10 @@ public class ProductController implements ProductApi {
     }
 
     @GetMapping(value = "/product/name/{name}")
-    public ResponseEntity<List<Product>> findByName(@PathVariable ("name") String name)
+    public ResponseEntity<Product> findByName(@PathVariable ("name") String name)
     {
-        List<Product> productList = service.findByName(name);
-        return new ResponseEntity<>(productList,HttpStatus.OK);
+        Product product = service.findByName(name);
+        return new ResponseEntity<>(product,HttpStatus.OK);
 
     }
 

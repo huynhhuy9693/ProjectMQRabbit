@@ -73,7 +73,9 @@ public class PurchaseFacade {
                     i--;
                 }else
                 {
-                    totalPrice=Double.valueOf(cartItemDTOList.get(i).getPrice()*cartItemDTOList.get(i).getQuantity());
+                    cartItemDTOList.get(i).setPrice(productFeignClient.findById(cartItemDTOList.get(i).getProductId()).getPrice());
+                    cartItemDTOList.get(i).setName(productFeignClient.findById(cartItemDTOList.get(i).getProductId()).getName());
+                    totalPrice+=Double.valueOf(cartItemDTOList.get(i).getPrice()*cartItemDTOList.get(i).getQuantity());
                 }
             }
         }
@@ -141,7 +143,7 @@ public class PurchaseFacade {
 
     public Double priceAfterVoucher(Purchase purchase) {
         Double totalPrice = purchase.getCartDTO().getTotalPrice();
-        VoucherDTO voucher = paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName());
+        VoucherDTO voucher = paymentFeignClient.getByNameVoucher(purchase.getCartDTO().getVoucherDTO().getName());
 
         // if user enter voucher
         if (!purchase.getCartDTO().getVoucherDTO().getName().isEmpty()) {
@@ -189,7 +191,7 @@ public class PurchaseFacade {
     }
 
     public void checkPromotion(Purchase purchase, CartEntity cart) {
-        VoucherDTO voucherDTO = paymentFeignClient.getByName(purchase.getCartDTO().getVoucherDTO().getName());
+        VoucherDTO voucherDTO = paymentFeignClient.getByNameVoucher(purchase.getCartDTO().getVoucherDTO().getName());
         PaymentDTO paymentDTO = paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName());
         //null voucher and payment
         if (voucherDTO == null && paymentDTO == null) {

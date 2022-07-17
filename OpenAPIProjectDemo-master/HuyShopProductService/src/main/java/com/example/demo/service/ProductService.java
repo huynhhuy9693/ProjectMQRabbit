@@ -77,10 +77,10 @@ public class ProductService {
         repository.deleteById(id);
     }
 
-    public List<Product> findByName(String name)
+    public Product findByName(String name)
     {
-        List<ProductEntity> request = repository.findByName(name);
-        List<Product> response = request.stream().map(item->modelMapper.map(item, Product.class)).collect(Collectors.toList());
+        ProductEntity request = repository.findByName(name);
+        Product response = modelMapper.map(request, Product.class);
         return response;
     }
 

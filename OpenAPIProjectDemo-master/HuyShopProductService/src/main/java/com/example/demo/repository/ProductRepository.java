@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
 
-    List<ProductEntity> findByName(String name);
+    ProductEntity findByName(String name);
 
     @Query("select p.quantityPresent from ProductEntity p where p.id = :id")
     Integer getQuantityById(@Param("id") Long id);
