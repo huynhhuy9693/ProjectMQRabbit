@@ -39,7 +39,7 @@ public class CartReportController {
         new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/cart/export/pdf/{startDate}/{lastDate}")
-    public void showReport(HttpServletResponse response,
+    public void showReportBetween(HttpServletResponse response,
                            @PathVariable("startDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                            @PathVariable("lastDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate)
             throws IOException {

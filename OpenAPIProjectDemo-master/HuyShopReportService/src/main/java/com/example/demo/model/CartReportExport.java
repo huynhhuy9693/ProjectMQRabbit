@@ -28,6 +28,10 @@ public class CartReportExport {
     List<CartReport> cartReports;
     String totalPrice;
     int month;
+    int year;
+
+    int dayStart;
+    int dayLast;
 
     public CartReportExport(List<CartReport> cartReports, String totalPrice) {
         this.cartReports = cartReports;
@@ -83,9 +87,14 @@ public class CartReportExport {
         font.setSize(18);
         font.setColor(Color.BLUE);
 
-        document.add(new Paragraph("MONTH : " + (month!=0? month:" "),font));
-        Paragraph p = new Paragraph("CART_REPORT: ",font);
+        Paragraph pDate = new Paragraph("DAY FROM : "+(dayStart!=0?dayStart:" ")
+                +"- DAY TO " +(dayLast!=0?dayLast:" ")
+                + ", MONTH : " + (month!=0? month:" ")
+                +" , YEAR : "+(year!=0? year:" "),font);
+        pDate.setAlignment(Paragraph.ALIGN_RIGHT);
+        Paragraph p = new Paragraph("-----CART_REPORT----- ",font);
         p.setAlignment(Paragraph.ALIGN_CENTER);
+        document.add(pDate);
         document.add(p);
 
 
@@ -97,7 +106,9 @@ public class CartReportExport {
         writeTableHeader(table);
         writeTableData(table);
         document.add(table);
-        document.add(new Paragraph("TOTAL-PRICE : " +totalPrice,font));
+        Paragraph pSum = new Paragraph("SUM-TOTAL-PRICE : "+totalPrice,font);
+        pSum.setAlignment(Paragraph.ALIGN_RIGHT);
+        document.add(pSum);
         document.close();
     }
 

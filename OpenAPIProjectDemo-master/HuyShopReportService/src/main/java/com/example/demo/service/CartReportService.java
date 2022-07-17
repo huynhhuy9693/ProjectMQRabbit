@@ -59,7 +59,10 @@ public class CartReportService {
         List<CartReport> cartReportList = cartFeignClient.findByDateOrderBetween(startDate,lastDate);
         String totalPrice = formatter.format(cartFeignClient.sumTotalPriceBetween(startDate,lastDate));
         int month = startDate.getMonth().getValue();
-        CartReportExport cartReportExport = new CartReportExport(cartReportList,totalPrice,month);
+        int year = startDate.getYear();
+        int dayFrom = startDate.getDayOfMonth();
+        int dayTo = lastDate.getDayOfMonth();
+        CartReportExport cartReportExport = new CartReportExport(cartReportList,totalPrice,month,year,dayFrom,dayTo);
         cartReportExport.export(response);
     }
 
