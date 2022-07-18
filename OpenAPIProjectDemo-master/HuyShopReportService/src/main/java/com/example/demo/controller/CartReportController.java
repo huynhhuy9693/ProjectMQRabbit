@@ -38,4 +38,10 @@ public class CartReportController {
         cartReportService.exPortToPDFBetween(response, startDate, lastDate);
         new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/cart/invoice/{orderNumber}")
+    public void showInvoice(HttpServletResponse response, @PathVariable("orderNumber") String orderNumber) throws IOException {
+        cartReportService.exPortInvoice(response,orderNumber);
+        new ResponseEntity<>(HttpStatus.OK);
+    }
 }

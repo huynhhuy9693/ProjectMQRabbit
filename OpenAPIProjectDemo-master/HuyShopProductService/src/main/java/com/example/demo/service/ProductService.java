@@ -65,7 +65,7 @@ public class ProductService {
         return null;
     }
 
-    public Product save(Product product) throws IOException {
+    public Product save(Product product) {
         ProductEntity request = modelMapper.map(product, ProductEntity.class);
         ProductEntity productEntity = repository.save(request);
         Product response = modelMapper.map(productEntity , Product.class);

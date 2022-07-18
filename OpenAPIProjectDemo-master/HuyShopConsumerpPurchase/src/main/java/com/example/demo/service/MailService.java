@@ -30,7 +30,7 @@ public class MailService implements RabbitListenerConfigurer {
 
     @RabbitListener(queues = "${spring.rabbitmq.queue}")
     public void doSend(Purchase purchase) throws Exception {
-
+        String invoice = "http://localhost:8080/report/cart/invoice/";
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(purchase.getCartDTO().getEmail());
         mailMessage.setSubject("thank you : " +purchase.getCartDTO().getOderNumber());
@@ -38,8 +38,8 @@ public class MailService implements RabbitListenerConfigurer {
                 "-- ToTal price : "+purchase.getCartDTO().getTotalPrice()+
                 "-- Your Order payment "+purchase.getStatus()+
                 "--We will delivery your product in 5 days in " + purchase.getShippingAddress()+
-                "-- Please check invoice details and status in website -- thank you and see your later"
-        );
+                "-- Please check invoice details -- thank you and see your later---"
+                +invoice+purchase.getCartDTO().getOderNumber());
         mailSender.send(mailMessage);
     }
 }

@@ -7,7 +7,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL95Dialect
-
   rabbitmq:
     host: localhost
     password: guest

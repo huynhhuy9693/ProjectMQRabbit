@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 
-import com.example.demo.model.CartReport;
 import com.lowagie.text.*;
 import com.lowagie.text.Font;
 import com.lowagie.text.pdf.PdfPCell;
@@ -11,12 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -25,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CartReportExport {
 
-    List<CartReport> cartReports;
+    List<CartDTO> cartDTOS;
     String totalPrice;
     int month;
     int year;
@@ -33,8 +30,8 @@ public class CartReportExport {
     int dayStart;
     int dayLast;
 
-    public CartReportExport(List<CartReport> cartReports, String totalPrice) {
-        this.cartReports = cartReports;
+    public CartReportExport(List<CartDTO> cartDTOS, String totalPrice) {
+        this.cartDTOS = cartDTOS;
         this.totalPrice = totalPrice;
     }
 
@@ -65,7 +62,7 @@ public class CartReportExport {
     public void writeTableData(PdfPTable table)
     {
 
-        for (CartReport cart: cartReports) {
+        for (CartDTO cart: cartDTOS) {
             table.addCell(String.valueOf(cart.getId()));
             table.addCell(cart.getOderNumber());
             table.addCell(String.valueOf(cart.getTotalPrice()));

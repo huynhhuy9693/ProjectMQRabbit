@@ -37,23 +37,23 @@ public class MailService {
         this.javaMailSender=javaMailSender;
     }
 
-    public void sendMailCreateUser(User user)
-    {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("register success " + user.getName() );
-        mailMessage.setText("Hello new  user : " + user.getUserName()+"-"+"password : "+user.getPassWord());
-        rabbitTemplate.convertAndSend(exchange,routingkey,mailMessage);
-    }
-
-    public void sendMailUpdateUser(User user)
-    {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("update success " + user.getName() );
-        mailMessage.setText("Hello user : " + user.getUserName()+"-"+"password changed success : "+user.getPassWord());
-        rabbitTemplate.convertAndSend(exchange,routingkey,mailMessage);
-    }
+//    public void sendMailCreateUser(User user)
+//    {
+//        SimpleMailMessage mailMessage = new SimpleMailMessage();
+//        mailMessage.setTo(user.getEmail());
+//        mailMessage.setSubject("register success " + user.getName() );
+//        mailMessage.setText("Hello new  user : " + user.getUserName()+"-"+"password : "+user.getPassWord());
+//        rabbitTemplate.convertAndSend(exchange,routingkey,mailMessage);
+//    }
+//
+//    public void sendMailUpdateUser(User user)
+//    {
+//        SimpleMailMessage mailMessage = new SimpleMailMessage();
+//        mailMessage.setTo(user.getEmail());
+//        mailMessage.setSubject("update success " + user.getName() );
+//        mailMessage.setText("Hello user : " + user.getUserName()+"-"+"password changed success : "+user.getPassWord());
+//        rabbitTemplate.convertAndSend(exchange,routingkey,mailMessage);
+//    }
 
     @Scheduled(cron = "0 0 9 * * ?")
     public void sendMailBeforeOneDayDelievery()
@@ -71,6 +71,7 @@ public class MailService {
             }
         }
     }
+
 
 
 }

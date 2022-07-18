@@ -42,7 +42,7 @@ public class PurchaseFacade {
     @Autowired
     MailService mailService;
 
-    private static final String digits = "0123456789";
+    private static final String digits = "123456789";
     private static final String ALPHA_NUMERIC = digits;
     private static Random generator = new Random();
 
@@ -52,6 +52,7 @@ public class PurchaseFacade {
     public PurchaseResponse placeOrder(Purchase purchase) throws MalformedURLException, MessagingException, UnsupportedEncodingException, JsonProcessingException {
 
         int numberOfCharactor = 6;
+
         Double totalPrice = 0D;
 
         CartDTO cartDTO = purchase.getCartDTO();
@@ -87,8 +88,8 @@ public class PurchaseFacade {
 
         cartDTO.setUserOrder(userOrder);
         cartDTO.setShippingAddress(purchase.getShippingAddress());
-        cartDTO.setStatus("DELIVERY");
-        cartDTO.setEmail(purchase.getCartDTO().getUserOrder().getEmail());
+        cartDTO.setStatus("ORDER-SUCCESS");
+        cartDTO.setEmail(userOrder.getEmail());
         cartDTO.setIsSending(Boolean.FALSE);
         cartDTO.setTotalPrice(checkTotalPrice(purchase));
 
@@ -102,27 +103,16 @@ public class PurchaseFacade {
         for (CartItemDTO cartItemDTO : cartItemDTOList) {
             CartItemEntity cartItemEntity = modelMapper.map(cartItemDTO, CartItemEntity.class);
             cart.add(cartItemEntity);
-            int quantity = cartItemDTO.getQuantity();
-            int quantityShop = productFeignClient.getQuantityById(cartItemDTO.getProductId());
-            int result = (quantityShop - quantity);
-            productFeignClient.updateProductQuantityForId(result, cartItemDTO.getProductId());
         }
 
         LocalDate localDate = LocalDate.now();
         cart.setDateOrder(localDate);
         repository.save(cart);
-        purchase.setStatus("SUCCESS");
 
         // ObjectWriter convert object -> String (jSon)
 //        ObjectWriter obj = new ObjectMapper().writer().withDefaultPrettyPrinter();
 //        String jsonPurchase = obj.writeValueAsString(purchase);
 
-        try {
-            mailService.sendMailPurchaseSuccsess(purchase);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return new PurchaseResponse(oderNumber);
 
     }
@@ -143,10 +133,10 @@ public class PurchaseFacade {
 
     public Double priceAfterVoucher(Purchase purchase) {
         Double totalPrice = purchase.getCartDTO().getTotalPrice();
-        VoucherDTO voucher = paymentFeignClient.getByNameVoucher(purchase.getCartDTO().getVoucherDTO().getName());
+        VoucherDTO voucher = paymentFeignClient.getByNameVoucher(purchase.getCartDTO().getVoucher().getName());
 
         // if user enter voucher
-        if (!purchase.getCartDTO().getVoucherDTO().getName().isEmpty()) {
+        if (!purchase.getCartDTO().getVoucher().getName().isEmpty()) {
             //if voucher equal voucher DB
             if (voucher != null) {
                 if (voucher.getId() == 1) {
@@ -164,9 +154,9 @@ public class PurchaseFacade {
 
     public Double priceAfterPayment(Purchase purchase) {
         Double totalPrice = purchase.getCartDTO().getTotalPrice();
-        PaymentDTO payment = paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName());
-        //if user payment by some payment in payment DB and not use voucher
-        if (!purchase.getCartDTO().getPaymentDTO().getName().isEmpty()) {
+        PaymentDTO payment = paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPayment().getName());
+        //if user payment by some payment in payment DB
+        if (!purchase.getCartDTO().getPayment().getName().isEmpty()) {
             if (payment != null) {
                 if (payment.getId() == 1) {
                     //discount 5% -VISA
@@ -191,8 +181,8 @@ public class PurchaseFacade {
     }
 
     public void checkPromotion(Purchase purchase, CartEntity cart) {
-        VoucherDTO voucherDTO = paymentFeignClient.getByNameVoucher(purchase.getCartDTO().getVoucherDTO().getName());
-        PaymentDTO paymentDTO = paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPaymentDTO().getName());
+        VoucherDTO voucherDTO = paymentFeignClient.getByNameVoucher(purchase.getCartDTO().getVoucher().getName());
+        PaymentDTO paymentDTO = paymentFeignClient.getByNamePayment(purchase.getCartDTO().getPayment().getName());
         //null voucher and payment
         if (voucherDTO == null && paymentDTO == null) {
             cart.setVoucher(NO_VOUCHER);
@@ -200,25 +190,25 @@ public class PurchaseFacade {
         }
         //null payment - use voucher
         else if (voucherDTO != null && paymentDTO == null) {
-            cart.setVoucher(purchase.getCartDTO().getVoucherDTO().getName().toUpperCase());
+            cart.setVoucher(purchase.getCartDTO().getVoucher().getName().toUpperCase());
             cart.setPayment(NO_PAYMENT);
         }
         //voucher null - use payment
         else if (voucherDTO == null && paymentDTO != null) {
             cart.setVoucher(NO_VOUCHER);
-            cart.setPayment(purchase.getCartDTO().getPaymentDTO().getName().toUpperCase());
+            cart.setPayment(purchase.getCartDTO().getPayment().getName().toUpperCase());
         } //price of payment <= price of voucher
         else if (priceAfterVoucher(purchase) >= priceAfterPayment(purchase)) {
             cart.setVoucher(NO_VOUCHER);
-            cart.setPayment(purchase.getCartDTO().getPaymentDTO().getName().toUpperCase());
+            cart.setPayment(purchase.getCartDTO().getPayment().getName().toUpperCase());
         } //price of payment <= price of voucher
         else if (priceAfterVoucher(purchase) <= priceAfterPayment(purchase)) {
-            cart.setVoucher(purchase.getCartDTO().getVoucherDTO().getName().toUpperCase());
+            cart.setVoucher(purchase.getCartDTO().getVoucher().getName().toUpperCase());
             cart.setPayment(NO_PAYMENT);
         }
         // else
         else {
-            cart.setVoucher(purchase.getCartDTO().getVoucherDTO().getName().toUpperCase());
+            cart.setVoucher(purchase.getCartDTO().getVoucher().getName().toUpperCase());
             cart.setPayment(NO_PAYMENT);
         }
     }

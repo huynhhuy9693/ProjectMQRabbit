@@ -1,18 +1,13 @@
 package com.example.demo.service;
 
-import com.example.demo.model.CartReport;
+import com.example.demo.model.CartDTO;
+import com.example.demo.model.CartItemDTO;
 import com.example.demo.model.CartReportExport;
-import com.lowagie.text.*;
-import com.lowagie.text.Font;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
+import com.example.demo.model.Invoice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -27,6 +22,8 @@ public class CartReportService {
 
     @Autowired
     CartFeignClient cartFeignClient;
+    @Autowired
+    ProductReportService productReportService;
 
     public void exPortToPDF(HttpServletResponse response) throws IOException {
         System.out.println("report");
@@ -39,9 +36,9 @@ public class CartReportService {
         String headerValue = "attachment; filename=cart-report_" + currentDateTime + ".pdf";
         response.setHeader(headerKey,headerValue);
         NumberFormat formatter = new DecimalFormat("###,###.###");
-        List<CartReport> cartReportList = cartFeignClient.findAllCart();
+        List<CartDTO> cartDTOList = cartFeignClient.findAllCart();
         String totalPrice =formatter.format(cartFeignClient.sumTotalPrice()) ;
-        CartReportExport cartReportExport = new CartReportExport(cartReportList,totalPrice);
+        CartReportExport cartReportExport = new CartReportExport(cartDTOList,totalPrice);
         cartReportExport.export(response);
     }
 
@@ -55,15 +52,35 @@ public class CartReportService {
         String headerKey = " Content-Disposition";
         String headerValue = "attachment; filename=cart-report_" + currentDateTime + ".pdf";
         response.setHeader(headerKey,headerValue);
-        DecimalFormat formatter = new DecimalFormat("###,###.###");
-        List<CartReport> cartReportList = cartFeignClient.findByDateOrderBetween(startDate,lastDate);
+        DecimalFormat formatter = new DecimalFormat("#,###.###");
+        List<CartDTO> cartDTOList = cartFeignClient.findByDateOrderBetween(startDate,lastDate);
         String totalPrice = formatter.format(cartFeignClient.sumTotalPriceBetween(startDate,lastDate));
         int month = startDate.getMonth().getValue();
         int year = startDate.getYear();
         int dayFrom = startDate.getDayOfMonth();
         int dayTo = lastDate.getDayOfMonth();
-        CartReportExport cartReportExport = new CartReportExport(cartReportList,totalPrice,month,year,dayFrom,dayTo);
+        CartReportExport cartReportExport = new CartReportExport(cartDTOList,totalPrice,month,year,dayFrom,dayTo);
         cartReportExport.export(response);
+    }
+
+    public void exPortInvoice(HttpServletResponse response, String oderNumber) throws IOException {
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = " Content-Disposition";
+        String headerValue = "attachment; filename=invoice_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey,headerValue);
+        NumberFormat formatter = new DecimalFormat("#,###.###");
+        CartDTO cartDTO = cartFeignClient.findByOderNumber(oderNumber);
+        List<CartItemDTO> cartItemDTOList = cartFeignClient.findItemByOrderNumber(oderNumber);
+        for (CartItemDTO cartItem: cartItemDTOList) {
+            cartItem.setName(productReportService.findById(cartItem.getProductId()).getName());
+        }
+        Invoice invoice = new Invoice(cartDTO, cartItemDTOList);
+        invoice.export(response);
+
     }
 
 }

@@ -24,8 +24,8 @@ public class CartDTO {
     private String shippingAddress;
     private String email;;
     private Boolean isSending;
-    private VoucherDTO voucherDTO;
-    private PaymentDTO paymentDTO;
+    private VoucherDTO voucher;
+    private PaymentDTO payment;
 
 
 }

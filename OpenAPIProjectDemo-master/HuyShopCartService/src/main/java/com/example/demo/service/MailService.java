@@ -21,14 +21,14 @@ public class MailService {
     @Value("${spring.rabbitmq.routingkey}")
     private String routingkey;
 
-    public void sendMailPurchaseSuccsess( Purchase purchase)
-    {
-        try{
-            rabbitTemplate.convertAndSend(exchange,routingkey,purchase);
-
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
+//    public void sendMailPurchaseSuccsess( Purchase purchase)
+//    {
+//        try{
+//            rabbitTemplate.convertAndSend(exchange,routingkey,purchase);
+//
+//        }catch (Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+//    }
 }

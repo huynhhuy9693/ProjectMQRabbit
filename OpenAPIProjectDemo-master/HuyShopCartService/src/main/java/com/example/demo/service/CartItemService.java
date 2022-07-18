@@ -98,5 +98,11 @@ public class CartItemService {
         List<CartItem> cartItemList = cartItemEntityList.stream().map(item->modelMapper.map(item , CartItem.class)).collect(Collectors.toList());
         return cartItemList;
     }
+    public List<CartItem> findByOrdernumberAndStatus(String oderNumber, String status)
+    {
+        List<CartItemEntity> cartItemEntityList = repository.findByOrdernumberAndStatus(oderNumber,"SUCCESS");
+        List<CartItem> cartItemList = cartItemEntityList.stream().map(item->modelMapper.map(item , CartItem.class)).collect(Collectors.toList());
+        return cartItemList;
+    }
 }
 

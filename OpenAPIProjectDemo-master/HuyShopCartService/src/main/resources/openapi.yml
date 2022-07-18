@@ -283,6 +283,8 @@ components:
             type: string
         payment:
             type: string
+        shippingAddress:
+            type: string
     CartItem:
       description: This is Cart-Item Model
       type: object

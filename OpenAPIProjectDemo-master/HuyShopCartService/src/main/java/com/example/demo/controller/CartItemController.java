@@ -42,4 +42,11 @@ public class CartItemController {
         List<CartItem> cartItemList = service.findByOrdernumber(oderNumber);
         return new ResponseEntity<>(cartItemList,HttpStatus.OK);
     }
+
+    @GetMapping(value = "/cart-item/cart/{oderNumber}/{status}")
+    public ResponseEntity<List<CartItem>> findByOrderNumberAndStatus(@PathVariable ("oderNumber") String oderNumber, @PathVariable("status") String status)
+    {
+        List<CartItem> cartItemList = service.findByOrdernumberAndStatus(oderNumber,status);
+        return new ResponseEntity<>(cartItemList,HttpStatus.OK);
+    }
 }

@@ -4,6 +4,7 @@ import com.example.demo.dto.*;
 import com.example.demo.entity.CartEntity;
 import com.example.demo.entity.CartItemEntity;
 import com.example.demo.model.Cart;
+import com.example.demo.repository.CartItemRepository;
 import com.example.demo.repository.CartRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +36,22 @@ public class CartService {
     @Autowired
     private CartItemService cartItemService;
 
-    public CartDTO findByOrderNumber(String oderNumber)
+    @Autowired
+    private CartItemRepository cartItemRepository;
+    @Autowired
+    PaymentFeignClient paymentFeignClient;
+
+    public Cart findByOrderNumber(String oderNumber)
     {
         CartEntity cart = repository.findByOderNumber(oderNumber);
-        CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+        Cart cartDTO = modelMapper.map(cart, Cart.class);
         return cartDTO;
     }
 
     @Transactional
     public Integer updateStatusByOrdernumber(String status , String orderNumber)
     {
-        status ="SUCCESS";
+        status ="DELIVERY";
         int result = repository.updateStatusByOrdernumber(status,orderNumber);
         return result;
     }
@@ -98,5 +104,15 @@ public class CartService {
         Long result = repository.sumByDateOrderBetween(startDate,lastDate);
         return result;
     }
+
+//    public void deliveryAndUpdate(String orderNumber)
+//    {
+//        List<CartItemEntity> cartItemEntityList =cartItemRepository.findByOrdernumber(orderNumber);
+//        List<CartItemDTO> cartItemDTOLis = cartItemEntityList.stream().map(item->modelMapper.map(item, CartItemDTO.class)).collect(Collectors.toList());
+//        for(CartItemDTO cartItemDTO: cartItemDTOLis)
+//        {
+//
+//        }
+//    }
 
 }

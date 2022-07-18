@@ -6,10 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,13 +13,12 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartReport {
+public class CartDTO {
 
     private Long id ;
     private String oderNumber;
     private Double totalPrice;
     private String status;
-    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate dateOrder;
     private String shippingAddress;
     private String userOrder;

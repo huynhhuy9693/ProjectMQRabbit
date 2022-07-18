@@ -17,4 +17,8 @@ public interface CartItemRepository extends JpaRepository<CartItemEntity,Long> {
 
     @Query("SELECT SUM(c.quantity) FROM CartItemEntity c WHERE c.productId=:productId")
     Integer countCartItemByProductId(@Param("productId") Long productId);
+
+    @Query("select c from CartItemEntity c where c.cartEntity.oderNumber =:oderNumber AND c.cartEntity.status=:status")
+    List<CartItemEntity> findByOrdernumberAndStatus(@Param("oderNumber") String  oderNumber, @Param("status") String status);
+
 }
