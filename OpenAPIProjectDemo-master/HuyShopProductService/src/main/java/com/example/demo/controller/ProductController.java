@@ -99,4 +99,18 @@ public class ProductController implements ProductApi {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
+    @GetMapping(value = "/delivery/{id}")
+    public ResponseEntity getDeliveryById(@PathVariable  Long id)
+    {
+        int quantity = service.getDeliveryById(id);
+        return new ResponseEntity<>(quantity,HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/product/delivery/{id}/{delivery}")
+    public ResponseEntity<Integer> updateDeliveryForId(@PathVariable("delivery") int delivery,@PathVariable("id") Long id)
+    {
+        int result = service.updateDeliveryForId(delivery ,id);
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
 }

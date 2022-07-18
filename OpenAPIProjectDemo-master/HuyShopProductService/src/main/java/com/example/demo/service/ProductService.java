@@ -119,5 +119,17 @@ public class ProductService {
 
     }
 
+    public Integer getDeliveryById(Long id)
+    {
+        int quantity = repository.getQuantityDeliveryById(id);
+        return quantity;
+    }
+
+    @Transactional
+    public Integer updateDeliveryForId(int delivery,Long id)
+    {
+        int result = repository.updateDelieveryForId(delivery,id);
+        return result;
+    }
 
 }

@@ -37,8 +37,8 @@ public class ProductEntity {
     @Column(name ="status")
     private boolean status;
 
-    @Column(name = "sold")
-    private int sold;
+    @Column(name = "delivery")
+    private int delivery;
 
     @Column(name = "quantity_present")
     private int quantityPresent;

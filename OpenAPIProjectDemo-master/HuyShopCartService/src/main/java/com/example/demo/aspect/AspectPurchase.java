@@ -65,14 +65,5 @@ public class AspectPurchase {
     }
 
 
-//    @Around("execution(* com.example.demo.controller.CartController.placeOrder(..)")
-//    public void purchaseSuccess(ProceedingJoinPoint joinPoint) throws Throwable {
-//        logger.info("start purchase");
-//        Purchase purchase = (Purchase) joinPoint.proceed();
-//        logger.info("send mail");
-//        rabbitTemplate.convertAndSend(exchange,routingkey,purchase);
-//        logger.info("purchase success");
-//
-//
-//    }
+
 }

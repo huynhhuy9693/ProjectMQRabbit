@@ -19,6 +19,11 @@ public interface ProductFeignClient {
 
     @GetMapping(value = "/admin-product/product/{id}")
     ProductDTO findById(@PathVariable("id") Long id);
-    
 
+
+    @GetMapping(value = "/admin-product/delivery/{id}")
+    Integer getDeliveryById(@PathVariable Long id);
+
+    @PutMapping(value = "/admin-product/product/delivery/{id}/{delivery}")
+    Integer updateDeliveryForId(@PathVariable ("delivery") int delivery,@PathVariable ("id") Long id);
 }

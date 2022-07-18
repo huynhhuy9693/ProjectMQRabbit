@@ -338,7 +338,7 @@ components:
         price:
           type: integer
           format: int64
-        sold:
+        delivery:
           type: integer
           format: int32
         quantityPresent:

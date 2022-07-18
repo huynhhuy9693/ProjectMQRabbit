@@ -5,14 +5,12 @@ import com.example.demo.api.CartApi;
 import com.example.demo.model.Cart;
 import com.example.demo.service.CartService;
 import io.swagger.models.auth.In;
+import org.bouncycastle.pqc.crypto.newhope.NHOtherInfoGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -68,7 +66,12 @@ public class CartAdminController implements CartApi {
     }
 
 
-
+    @PutMapping(value = "/delivery/update/{orderNumber}")
+    public ResponseEntity<Void> deliveryAndUpdate(@PathVariable("orderNumber") String orderNumber)
+    {
+        cartService.deliveryAndUpdate(orderNumber);
+        return  new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 

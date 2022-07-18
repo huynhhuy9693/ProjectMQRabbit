@@ -51,7 +51,6 @@ public class CartService {
     @Transactional
     public Integer updateStatusByOrdernumber(String status , String orderNumber)
     {
-        status ="DELIVERY";
         int result = repository.updateStatusByOrdernumber(status,orderNumber);
         return result;
     }
@@ -105,14 +104,19 @@ public class CartService {
         return result;
     }
 
-//    public void deliveryAndUpdate(String orderNumber)
-//    {
-//        List<CartItemEntity> cartItemEntityList =cartItemRepository.findByOrdernumber(orderNumber);
-//        List<CartItemDTO> cartItemDTOLis = cartItemEntityList.stream().map(item->modelMapper.map(item, CartItemDTO.class)).collect(Collectors.toList());
-//        for(CartItemDTO cartItemDTO: cartItemDTOLis)
-//        {
-//
-//        }
-//    }
+    @Transactional
+    public void deliveryAndUpdate(String orderNumber)
+    {
+        List<CartItemEntity> cartItemEntityList =cartItemRepository.findByOrdernumber(orderNumber);
+        List<CartItemDTO> cartItemDTOLis = cartItemEntityList.stream().map(item->modelMapper.map(item, CartItemDTO.class)).collect(Collectors.toList());
+        for(CartItemDTO cartItemDTO: cartItemDTOLis)
+        {
+            int quantityDelivery = productFeignClient.getDeliveryById(cartItemDTO.getProductId());
+            int quantityCartItem = cartItemDTO.getQuantity();
+            int result = quantityDelivery+quantityCartItem;
+            productFeignClient.updateDeliveryForId(result, cartItemDTO.getProductId());
+        }
+        repository.updateStatusByOrdernumber("DELIVERED",orderNumber);
+    }
 
 }

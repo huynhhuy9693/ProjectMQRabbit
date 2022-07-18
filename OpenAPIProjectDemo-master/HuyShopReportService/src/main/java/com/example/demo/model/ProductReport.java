@@ -18,7 +18,7 @@ public class ProductReport {
         private String img_url;
         private int quantity;
         private boolean status;
-        private int sold;
+        private int delivery;
         private int quantityPresent;
 
 
