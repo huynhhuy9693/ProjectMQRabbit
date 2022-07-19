@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,7 @@ public class UserController implements UserApi {
 
 
     @GetMapping(value = "/user/{username}")
+    @RolesAllowed("admin")
     public ResponseEntity<User> findByUser(@PathVariable ("username") String userName)
     {
         User user = service.findByUserName(userName);
@@ -71,6 +73,7 @@ public class UserController implements UserApi {
     }
 
     @GetMapping(value = "/users/{id}")
+    @RolesAllowed("user")
     public  ResponseEntity<UserEntity> findByUsersId(@PathVariable ("id") Long id)
     {
         UserEntity user = service.findByUserId(id);
