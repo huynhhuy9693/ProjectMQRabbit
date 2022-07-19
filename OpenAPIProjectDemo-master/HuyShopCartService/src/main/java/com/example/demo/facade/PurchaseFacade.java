@@ -165,7 +165,7 @@ public class PurchaseFacade {
                     //discount 10% -PAYPAL
                     return totalPrice * 0.9;
                 } else if (payment.getId() == 3) {
-                    //discount 80% -MOMO
+                    //discount 20% -MOMO
                     return totalPrice * 0.2;
                 }
             }

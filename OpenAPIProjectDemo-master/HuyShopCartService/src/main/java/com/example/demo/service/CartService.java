@@ -7,6 +7,8 @@ import com.example.demo.model.Cart;
 import com.example.demo.repository.CartItemRepository;
 import com.example.demo.repository.CartRepository;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,9 @@ public class CartService {
     private CartItemRepository cartItemRepository;
     @Autowired
     PaymentFeignClient paymentFeignClient;
+
+    @Autowired
+    ReportFeignClient reportFeignClient;
 
     public Cart findByOrderNumber(String oderNumber)
     {

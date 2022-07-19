@@ -7,6 +7,7 @@ import com.example.demo.dto.CartItemDTO;
 import com.example.demo.dto.Purchase;
 import com.example.demo.dto.PurchaseResponse;
 import com.example.demo.service.ProductFeignClient;
+import com.example.demo.service.ReportFeignClient;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
@@ -33,6 +34,8 @@ public class AspectPurchase {
 
     @Autowired
     ProductFeignClient productFeignClient;
+    @Autowired
+    ReportFeignClient reportFeignClient;
 
     private Logger logger = LoggerFactory.getLogger(AspectPurchase.class);
 
@@ -62,6 +65,13 @@ public class AspectPurchase {
         rabbitTemplate.convertAndSend(exchange,routingkey,purchase);
         logger.info("send mail ok");
 
+    }
+
+    @AfterReturning(value = "execution(* com.example.demo.service.CartService.deliveryAndUpdate(..)) and args(orderNumber)")
+    public void afterUpdateDelivered(JoinPoint joinPoint, String orderNumber)
+    {
+        logger.info("print invoice" + orderNumber);
+        reportFeignClient.showInvoice(orderNumber);
     }
 
 

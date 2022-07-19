@@ -1,0 +1,22 @@
+jwt:
+  secret: javainuse
+  get:
+    token:
+      uri: /authenticate
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: security-service
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+server:
+  port: '9999'
+
+  eureka:
+    client:
+      service-url:
+        default-zone: 'http://localhost:8761/eureka'
+
+

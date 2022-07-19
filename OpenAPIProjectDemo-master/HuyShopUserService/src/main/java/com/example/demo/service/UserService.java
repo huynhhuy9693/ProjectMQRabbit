@@ -84,4 +84,16 @@ public class UserService {
         }
         return null;
     }
+
+    public List<User> findALlByUserNameAndPassword() {
+        try {
+            List<UserEntity> entityList = repository.findAllUserNameAndPassword();
+            List<User> userList = entityList.stream().map(item -> modelMapper.map(item, User.class)).collect(Collectors.toList());
+            return userList;
+        } catch (Exception e) {
+            e.getCause().printStackTrace();
+        }
+            return null;
+    }
+
 }

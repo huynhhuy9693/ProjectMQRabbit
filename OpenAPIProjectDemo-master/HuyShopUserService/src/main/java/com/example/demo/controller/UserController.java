@@ -76,4 +76,10 @@ public class UserController implements UserApi {
         UserEntity user = service.findByUserId(id);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
+
+    @GetMapping(value = "/search/all")
+    public ResponseEntity<List<User>> findALlByUserNameAndPassword()
+    {
+        return new ResponseEntity<>(service.findALlByUserNameAndPassword(), HttpStatus.OK);
+    }
 }
