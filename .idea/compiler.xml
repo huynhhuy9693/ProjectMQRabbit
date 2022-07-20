@@ -10,6 +10,7 @@
         <module name="demo (2)" />
         <module name="demo (1)" />
         <module name="demo (4)" />
+        <module name="demo (10)" />
         <module name="demo (3)" />
         <module name="demo (6)" />
         <module name="demo (5)" />
@@ -22,6 +23,7 @@
     <bytecodeTargetLevel>
       <module name="demo" target="11" />
       <module name="demo (1)" target="11" />
+      <module name="demo (10)" target="11" />
       <module name="demo (2)" target="11" />
       <module name="demo (3)" target="11" />
       <module name="demo (4)" target="11" />
@@ -36,6 +38,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="demo" options="-parameters" />
       <module name="demo (1)" options="-parameters" />
+      <module name="demo (10)" options="-parameters" />
       <module name="demo (2)" options="-parameters" />
       <module name="demo (3)" options="-parameters" />
       <module name="demo (4)" options="-parameters" />

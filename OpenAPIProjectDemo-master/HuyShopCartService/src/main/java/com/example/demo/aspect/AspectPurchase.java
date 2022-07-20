@@ -48,7 +48,7 @@ public class AspectPurchase {
     @AfterThrowing("execution(* com.example.demo.controller.CartController.placeOrder(..))")
     public void afterPurchaseFalse(JoinPoint joinPoint)
     {
-        logger.info("purchase false");
+        logger.error("purchase false");
     }
     @AfterReturning(value = "execution(* com.example.demo.controller.CartController.placeOrder(..)) and args(purchase)")
     public void afterPurchaseSuccess(JoinPoint joinPoint, Purchase purchase)

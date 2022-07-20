@@ -26,7 +26,6 @@ public class CartReportExport {
     String totalPrice;
     int month;
     int year;
-
     int dayStart;
     int dayLast;
 

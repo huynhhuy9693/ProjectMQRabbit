@@ -4,6 +4,7 @@ server:
 spring:
   main:
     web-application-type: reactive
+    allow-bean-definition-overriding: true
   cloud:
     gateway:
       routes:
@@ -41,10 +42,11 @@ eureka:
     service-url:
       default-zone: 'http://localhost:8761/eureka'
 
-keycloak:
-  realm: myproject
-  auth-server-url: http://localhost:8180
-  resource: huyshop
-  public-client: true
-  bearer-only: true
+#keycloak:
+#  realm: myproject
+#  auth-server-url: http://localhost:8099
+#  ssl-required: external
+#  resource: huyshop
+#  public-client: true
+#  bearer-only: true
 

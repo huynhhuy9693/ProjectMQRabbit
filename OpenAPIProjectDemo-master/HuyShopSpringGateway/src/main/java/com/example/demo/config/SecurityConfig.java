@@ -11,7 +11,6 @@
 //import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
-//import org.springframework.security.core.session.SessionRegistry;
 //import org.springframework.security.core.session.SessionRegistryImpl;
 //import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 //import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -25,9 +24,9 @@
 //     */
 //    @Autowired
 //    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        KeycloakAuthenticationProvider authenticationProvider= new KeycloakAuthenticationProvider();
+//        KeycloakAuthenticationProvider authenticationProvider = new KeycloakAuthenticationProvider();
 //        authenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
-//        auth.authenticationProvider(keycloakAuthenticationProvider());
+//        auth.authenticationProvider(authenticationProvider);
 //    }
 //
 //    /**
@@ -36,17 +35,11 @@
 //    @Bean
 //    @Override
 //    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-//        return new RegisterSessionAuthenticationStrategy(buildSessionRegistry());
-//    }
-//
-//    @Bean
-//    protected SessionRegistry buildSessionRegistry() {
-//        return new SessionRegistryImpl();
+//        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
 //    }
 //
 //    @Override
-//    protected void configure(HttpSecurity http) throws Exception
-//    {
+//    protected void configure(HttpSecurity http) throws Exception {
 //        super.configure(http);
 //        http
 //                .authorizeRequests()
