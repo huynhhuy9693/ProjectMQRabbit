@@ -2,16 +2,19 @@
 server:
   port: 8100
 spring:
-  rabbitmq:
-    host: localhost
-    password: guest
-    port: 15672
-    username: guest
-    exchange: purcharse.exchange
-    queue: purcharse.queue
-    routingkey: purcharse.routingkey
-
-
+  cloud:
+    stream:
+      bindings:
+        purchaseChannel:
+          destination: purchases
+#  rabbitmq:
+#    host: localhost
+#    password: guest
+#    port: 15672
+#    username: guest
+#    exchange: purcharse.exchange
+#    queue: purcharse.queue
+#    routingkey: purcharse.routingkey
   mail:
     host: smtp.gmail.com
     port: '587'

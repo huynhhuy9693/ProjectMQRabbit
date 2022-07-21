@@ -3,6 +3,7 @@ package com.example.demo.aspect;
 
 
 
+import com.example.demo.channel.PurchaseBinding;
 import com.example.demo.dto.CartItemDTO;
 import com.example.demo.dto.Purchase;
 import com.example.demo.dto.PurchaseResponse;
@@ -14,23 +15,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 
+@EnableBinding(PurchaseBinding.class)
 @Aspect
 @Configuration
 public class AspectPurchase {
 
-    @Autowired
-    RabbitTemplate rabbitTemplate;
+    private MessageChannel messageChannel;
 
-    @Value("${spring.rabbitmq.exchange}")
-    private String exchange;
 
-    @Value("${spring.rabbitmq.routingkey}")
-    private String routingkey;
+    //Output purchaseChanel
+    public AspectPurchase(PurchaseBinding binding) {
+        messageChannel = binding.handlePurchase();
+    }
 
     @Autowired
     ProductFeignClient productFeignClient;
@@ -50,7 +53,8 @@ public class AspectPurchase {
     {
         logger.error("purchase false");
     }
-    @AfterReturning(value = "execution(* com.example.demo.controller.CartController.placeOrder(..)) and args(purchase)")
+
+    @AfterReturning(value = "execution(* com.example.demo.facade.PurchaseFacade.placeOrder(..)) and args(purchase)")
     public void afterPurchaseSuccess(JoinPoint joinPoint, Purchase purchase)
     {
         logger.info("purchase success");
@@ -62,7 +66,8 @@ public class AspectPurchase {
         }
         logger.info("update success");
         logger.info("send mail for customer");
-        rabbitTemplate.convertAndSend(exchange,routingkey,purchase);
+        Message<Purchase> purchaseMessage = MessageBuilder.withPayload(purchase).build();
+        this.messageChannel.send(purchaseMessage);
         logger.info("send mail ok");
 
     }

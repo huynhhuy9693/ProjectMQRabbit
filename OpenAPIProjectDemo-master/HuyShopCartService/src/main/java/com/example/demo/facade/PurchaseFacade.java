@@ -39,8 +39,6 @@ public class PurchaseFacade {
     @Autowired
     PaymentFeignClient paymentFeignClient;
 
-    @Autowired
-    MailService mailService;
 
     private static final String digits = "123456789";
     private static final String ALPHA_NUMERIC = digits;

@@ -1,4 +1,9 @@
 spring:
+  cloud:
+    stream:
+      bindings:
+        purchaseChannel:
+          destination: purchases
   jpa:
     database: POSTGRESQL
     show-sql: true
@@ -7,14 +12,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL95Dialect
-  rabbitmq:
-    host: localhost
-    password: guest
-    port: 15672
-    username: guest
-    exchange: purcharse.exchange
-    queue: purcharse.queue
-    routingkey: purcharse.routingkey
+#  rabbitmq:
+#    host: localhost
+#    password: guest
+#    port: 15672
+#    username: guest
+#    exchange: purcharse.exchange
+#    queue: purcharse.queue
+#    routingkey: purcharse.routingkey
 
   mail:
     host: smtp.gmail.com
