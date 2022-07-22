@@ -2,8 +2,11 @@ spring:
   cloud:
     stream:
       bindings:
-        purchaseChannel:
+        handlePurchase-out-0:
           destination: purchases
+  output:
+    ansi:
+      enabled: always
   jpa:
     database: POSTGRESQL
     show-sql: true

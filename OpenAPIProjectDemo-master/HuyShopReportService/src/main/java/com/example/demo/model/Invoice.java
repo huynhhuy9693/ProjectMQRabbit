@@ -69,8 +69,14 @@ public class Invoice {
 
         document.open();
         Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+        Font fontNumber = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
         font.setSize(18);
         font.setColor(Color.BLUE);
+        fontNumber.setColor(Color.RED);
+        fontNumber.setSize(20);
+        Paragraph pOrderNumber = new Paragraph("Order_Number: " +cartDTO.getOderNumber(),fontNumber);
+        pOrderNumber.setAlignment(Paragraph.ALIGN_RIGHT);
+        document.add(pOrderNumber);
         Paragraph pName = new Paragraph("User_Name : " +cartDTO.getUserOrder(),font);
         pName.setAlignment(Paragraph.ALIGN_LEFT);
         document.add(pName);

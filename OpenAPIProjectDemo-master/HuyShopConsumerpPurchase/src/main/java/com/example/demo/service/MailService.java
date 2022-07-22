@@ -1,11 +1,8 @@
 package com.example.demo.service;
 
 
-import com.example.demo.channel.PurchaseBinding;
+import com.example.demo.source.PurchaseBinding;
 import com.example.demo.model.Purchase;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
-import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

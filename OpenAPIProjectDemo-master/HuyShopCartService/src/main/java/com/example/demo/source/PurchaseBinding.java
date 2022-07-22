@@ -1,11 +1,11 @@
-package com.example.demo.channel;
+package com.example.demo.source;
 
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;
 
 public interface PurchaseBinding {
 
-    @Output("purchaseChannel")
+    @Output("handlePurchase-out-0")
     MessageChannel handlePurchase();
 
 }

@@ -37,7 +37,7 @@ CartRepository extends JpaRepository<CartEntity,Long> {
     Integer updateIsSendingTrue(@Param("isSending") Boolean isSending,@Param("orderNumber") String orderNumber);
 
 
-    @Query("SELECT c FROM CartEntity c WHERE c.dateOrder BETWEEN :startDay AND :lastDay ")
+    @Query("SELECT c FROM CartEntity c WHERE c.dateOrder BETWEEN :startDay AND :lastDay ORDER BY c.dateOrder")
     List<CartEntity> findByDateOrderBetween(@Param("startDay") LocalDate startDay , @Param("lastDay") LocalDate lastDay);
 
     @Query("SELECT SUM(c.totalPrice) FROM CartEntity c WHERE c.dateOrder BETWEEN :startDay AND :lastDay ")

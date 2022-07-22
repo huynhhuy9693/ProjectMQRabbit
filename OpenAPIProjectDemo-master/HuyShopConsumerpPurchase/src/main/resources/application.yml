@@ -5,7 +5,7 @@ spring:
   cloud:
     stream:
       bindings:
-        purchaseChannel:
+        handlePurchase-in-0:
           destination: purchases
 #  rabbitmq:
 #    host: localhost
