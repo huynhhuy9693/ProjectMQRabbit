@@ -1,9 +1,4 @@
 spring:
-  cloud:
-    stream:
-      bindings:
-        handlePurchase-out-0:
-          destination: purchases
   output:
     ansi:
       enabled: always
@@ -66,6 +61,14 @@ eureka:
     service-url:
       default-zone: 'http://localhost:8761/eureka'
 
+logging:
+  file: D:\log\test.log
+  pattern:
+    file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
+  level:
+    org.springframework.web: ERROR
+    com.example.demo.facade.PurchaseFacade: DEBUG
+    org.hibernate: ERROR
 
 #    username: huynhhuy362022@gmail.com
 #    password: vjqhvxlfwbrzsxpz

@@ -2,10 +2,10 @@ package com.example.demo.aspect;
 
 
 
-
-import com.example.demo.source.PurchaseBinding;
+import com.example.demo.dto.CartDTO;
 import com.example.demo.dto.CartItemDTO;
 import com.example.demo.dto.Purchase;
+import com.example.demo.dto.PurchaseResponse;
 import com.example.demo.service.ProductFeignClient;
 import com.example.demo.service.ReportFeignClient;
 import org.aspectj.lang.JoinPoint;
@@ -13,31 +13,29 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
-import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpInputMessage;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 
-@EnableBinding(PurchaseBinding.class)
+import java.util.List;
+
+
 @Aspect
 @Configuration
+//@EnableBinding(PurchaseBinding.class)
 public class AspectPurchase {
 
     private MessageChannel messageChannel;
 
 
     //Output purchaseChanel
-    public AspectPurchase(PurchaseBinding binding) {
-        messageChannel = binding.handlePurchase();
-    }
+//    public AspectPurchase(PurchaseBinding binding) {
+//        messageChannel = binding.handlePurchase();
+//    }
+
 
     @Autowired
     ProductFeignClient productFeignClient;
@@ -46,6 +44,11 @@ public class AspectPurchase {
 
     private Logger logger = LoggerFactory.getLogger(AspectPurchase.class);
 
+    StreamBridge streamBridge;
+
+    public AspectPurchase(StreamBridge streamBridge) {
+        this.streamBridge = streamBridge;
+    }
 //    @Before("execution(* com.example.demo.controller.CartController.placeOrder(..))")
 //    public void beforePurchase(JoinPoint joinPoint)
 //    {
@@ -83,35 +86,61 @@ public class AspectPurchase {
         reportFeignClient.showInvoice(orderNumber);
     }
 
+
+
+
+
+
     @Around(value = "execution(* com.example.demo.controller.CartController.placeOrder(..)) and args(purchase)")
     public ResponseEntity<Object> handlePurchase(ProceedingJoinPoint joinPoint, Purchase purchase) throws Throwable {
+        //before
         logger.info("start Purchase");
+
         Object purchaseResponese = null;
-        if(purchase.getShippingAddress()!=null)
-        {
-             purchaseResponese = joinPoint.proceed();
+        if (purchase.getShippingAddress() != null
+                && purchase.getCartDTO().getUserOrder() != null
+                && purchase.getCartDTO().getCartItemDTOList() != null) {
+            //execution method placeOrder
+            purchaseResponese = joinPoint.proceed();
 
-            logger.info("Purchase Success");
-            for (CartItemDTO cartItem:purchase.getCartDTO().getCartItemDTOList()) {
-                int quantity = cartItem.getQuantity();
-                int quantityShop = productFeignClient.getQuantityById(cartItem.getProductId());
-                int result = (quantityShop - quantity);
-                productFeignClient.updateProductQuantityForId(result, cartItem.getProductId());
-                logger.info("update success");
+            if (purchase.getStatus().equalsIgnoreCase("FALSE"))
+            {
+                logger.info("send mail for admin info purchase false");
+                streamBridge.send("handleAfterOrderFalse", purchase);
 
-                logger.info("send mail for customer");
-                Message<Purchase> purchaseMessage = MessageBuilder.withPayload(purchase).build();
-                this.messageChannel.send(purchaseMessage);
-                logger.info("send mail ok");
+            }else
+            {
+                logger.info("Purchase Success");
+                for (CartItemDTO cartItem : purchase.getCartDTO().getCartItemDTOList()) {
+                    int quantity = cartItem.getQuantity();
+                    int quantityShop = productFeignClient.getQuantityById(cartItem.getProductId());
+                    int result = (quantityShop - quantity);
+                    productFeignClient.updateProductQuantityForId(result, cartItem.getProductId());
+                    logger.info("update success");
+                    logger.info("send mail for customer");
+//                Message<Purchase> purchaseMessage = MessageBuilder.withPayload(purchase).build();
+//                this.messageChannel.send(purchaseMessage);
+                    streamBridge.send("handlePurchase", purchase);
+                    logger.info("send mail ok");
+                    logger.info("send mail for admin ");
+                    streamBridge.send("handleAfterOrderSuccess", purchase);
+                    logger.info("send mail ok");
 
-                return new ResponseEntity<>(purchaseResponese,HttpStatus.OK);
+                    return new ResponseEntity<>(purchaseResponese, HttpStatus.OK);
+                }
             }
+
+            //after
+
+        } else if (purchase.getCartDTO().getUserOrder() == null) {
+            logger.error(" User not null ");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else if (purchase.getShippingAddress() == null) {
+            logger.error(" Address not null ");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-                 logger.error("address delivery not null");
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-
+            logger.error("Cart-Item  not null ");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
-
 }
+

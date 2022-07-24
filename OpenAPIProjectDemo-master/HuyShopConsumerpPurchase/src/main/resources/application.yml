@@ -1,12 +1,22 @@
 
 server:
   port: 8100
+
 spring:
   cloud:
+    function:
+      definition: handlePurchase;handleAfterOrderSuccess;handleAfterOrderFalse;
     stream:
-      bindings:
-        handlePurchase-in-0:
-          destination: purchases
+        bindings:
+          handlePurchase-in-0:
+            destination: handlePurchase
+          handleAfterOrderSuccess-in-0:
+            destination: handleAfterOrderSuccess
+          handleAfterOrderFalse-in-0:
+            destination: handleAfterOrderFalse
+
+
+
 #  rabbitmq:
 #    host: localhost
 #    password: guest

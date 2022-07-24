@@ -7,6 +7,8 @@ import com.example.demo.entity.CartEntity;
 import com.example.demo.entity.CartItemEntity;
 import com.example.demo.repository.CartRepository;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,7 @@ public class PurchaseFacade {
     @Autowired
     PaymentFeignClient paymentFeignClient;
 
+    private final Logger logger = LoggerFactory.getLogger(PurchaseFacade.class);
 
     private static final String digits = "123456789";
     private static final String ALPHA_NUMERIC = digits;
@@ -90,12 +93,27 @@ public class PurchaseFacade {
         cartDTO.setEmail(userOrder.getEmail());
         cartDTO.setIsSending(Boolean.FALSE);
         cartDTO.setTotalPrice(checkTotalPrice(purchase));
-
+        logger.debug("cartDTO = "+"\n"
+                + "status : " + purchase.getStatus()+"\n"
+                + "user_name : " + cartDTO.getUserOrder().getUserName()+"\n"
+                + "name : " + cartDTO.getUserOrder().getName()+"\n"
+                + "email : " + cartDTO.getUserOrder().getEmail()+"\n"
+                + "status : " +cartDTO.getStatus()+"\n"
+                + "total Price : "+cartDTO.getTotalPrice()+"\n"
+                + "oder-Number : "+cartDTO.getOderNumber()+"\n"
+                + "shipping-address : " +purchase.getShippingAddress()+"\n");
+        for( CartItemDTO cartItem : cartItemDTOList)
+        {
+            logger.debug("cart-item : " + "\n [ id:  " +cartItem.getProductId() + "\n"
+                    + "name : " +cartItem.getName() + "\n"
+                    + "quantity : " +cartItem.getQuantity() + "\n"
+                    + "price : " +cartItem.getPrice() + " ]  " + "\n"
+            );
+        }
 
         //save DB and update quantity in tabble Product
         CartEntity cart = modelMapper.map(cartDTO, CartEntity.class);
         cart.setUserNameOrder(cartDTO.getUserOrder().getUserName());
-
         checkPromotion(purchase, cart);
 
         for (CartItemDTO cartItemDTO : cartItemDTOList) {
@@ -105,12 +123,13 @@ public class PurchaseFacade {
 
         LocalDate localDate = LocalDate.now();
         cart.setDateOrder(localDate);
+        if (purchase.getStatus().equalsIgnoreCase("FALSE"))
+        {
+            purchase.setStatus("FALSE");
+            return null;
+        }
         repository.save(cart);
-
-        // ObjectWriter convert object -> String (jSon)
-//        ObjectWriter obj = new ObjectMapper().writer().withDefaultPrettyPrinter();
-//        String jsonPurchase = obj.writeValueAsString(purchase);
-
+        purchase.setStatus("SUCCESS");
         return new PurchaseResponse(oderNumber);
 
     }
@@ -211,3 +230,8 @@ public class PurchaseFacade {
         }
     }
 }
+
+//DOCUMENT
+// ObjectWriter convert object -> String (jSon)
+//        ObjectWriter obj = new ObjectMapper().writer().withDefaultPrettyPrinter();
+//        String jsonPurchase = obj.writeValueAsString(purchase);
