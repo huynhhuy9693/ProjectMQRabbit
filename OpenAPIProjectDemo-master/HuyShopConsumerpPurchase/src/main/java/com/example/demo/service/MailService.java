@@ -70,6 +70,7 @@ public class MailService {
         mailMessage.setText("user " + purchase.getCartDTO().getUserOrder().getUserName()
                 +"---- email :"+purchase.getCartDTO().getEmail()
                 +"---- purchase-status : " +purchase.getStatus()
+                +"---- order-number : " +purchase.getCartDTO().getOderNumber()
         );
         mailSender.send(mailMessage);
     }

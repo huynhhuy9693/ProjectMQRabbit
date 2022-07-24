@@ -57,7 +57,11 @@ public class PurchaseFacade {
         Double totalPrice = 0D;
 
         CartDTO cartDTO = purchase.getCartDTO();
-
+        if(purchase.getStatus()==null)
+        {
+            purchase.setStatus("SUCCESS");
+        }
+            purchase.setStatus(purchase.getStatus());
         String oderNumber = generateOrderNumber(numberOfCharactor);
         cartDTO.setOderNumber(oderNumber);
 
@@ -93,6 +97,7 @@ public class PurchaseFacade {
         cartDTO.setEmail(userOrder.getEmail());
         cartDTO.setIsSending(Boolean.FALSE);
         cartDTO.setTotalPrice(checkTotalPrice(purchase));
+
         logger.debug("cartDTO = "+"\n"
                 + "status : " + purchase.getStatus()+"\n"
                 + "user_name : " + cartDTO.getUserOrder().getUserName()+"\n"
@@ -101,7 +106,10 @@ public class PurchaseFacade {
                 + "status : " +cartDTO.getStatus()+"\n"
                 + "total Price : "+cartDTO.getTotalPrice()+"\n"
                 + "oder-Number : "+cartDTO.getOderNumber()+"\n"
-                + "shipping-address : " +purchase.getShippingAddress()+"\n");
+                + "shipping-address : " +purchase.getShippingAddress()+"\n"
+                + "voucher : " +purchase.getCartDTO().getVoucher().getName()+"\n"
+                + "payment : " +purchase.getCartDTO().getPayment().getName()+"\n"
+        );
         for( CartItemDTO cartItem : cartItemDTOList)
         {
             logger.debug("cart-item : " + "\n [ id:  " +cartItem.getProductId() + "\n"

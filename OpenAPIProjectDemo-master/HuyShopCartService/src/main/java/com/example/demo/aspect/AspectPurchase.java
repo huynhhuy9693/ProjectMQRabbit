@@ -95,14 +95,15 @@ public class AspectPurchase {
     public ResponseEntity<Object> handlePurchase(ProceedingJoinPoint joinPoint, Purchase purchase) throws Throwable {
         //before
         logger.info("start Purchase");
-
         Object purchaseResponese = null;
+
         if (purchase.getShippingAddress() != null
                 && purchase.getCartDTO().getUserOrder() != null
                 && purchase.getCartDTO().getCartItemDTOList() != null) {
             //execution method placeOrder
             purchaseResponese = joinPoint.proceed();
 
+            //after
             if (purchase.getStatus().equalsIgnoreCase("FALSE"))
             {
                 logger.info("send mail for admin info purchase false");
@@ -130,16 +131,17 @@ public class AspectPurchase {
                 }
             }
 
-            //after
-
         } else if (purchase.getCartDTO().getUserOrder() == null) {
             logger.error(" User not null ");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else if (purchase.getShippingAddress() == null) {
             logger.error(" Address not null ");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        }else if (purchase.getShippingAddress() == null)
+        {
             logger.error("Cart-Item  not null ");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
