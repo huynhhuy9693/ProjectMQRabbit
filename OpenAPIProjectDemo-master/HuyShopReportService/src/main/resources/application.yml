@@ -9,4 +9,14 @@ eureka:
 spring:
   application:
     name: report-service
+  main:
+    allow-circular-references: true
+    output:
+      ansi:
+        enabled: always
 
+jwt:
+  secret: huyhuynh
+  get:
+    token:
+      uri: /authenticate

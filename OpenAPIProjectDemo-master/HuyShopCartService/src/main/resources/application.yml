@@ -70,9 +70,6 @@ eureka:
       default-zone: 'http://localhost:8761/eureka'
 
 logging:
-  file: application.log
-  pattern:
-    file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
   level:
     org:
       springframework: INFO

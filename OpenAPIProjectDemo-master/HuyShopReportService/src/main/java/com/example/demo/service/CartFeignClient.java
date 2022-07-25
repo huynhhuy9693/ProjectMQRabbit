@@ -24,15 +24,18 @@ public interface CartFeignClient {
 
     @GetMapping(value = "/cart/order-date/{startDate}/{lastDate}")
     List<CartDTO> findByDateOrderBetween(@PathVariable ("startDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate
-                                            , @PathVariable("lastDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate);
+                                            , @PathVariable("lastDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate,
+                                                @RequestHeader("Authorization") String token);
 
     @GetMapping(value = "cart/sum-total-price/{startDate}/{lastDate}")
     Long sumTotalPriceBetween(@PathVariable ("startDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate
-            ,@PathVariable("lastDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate);
+            ,@PathVariable("lastDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate,
+                              @RequestHeader("Authorization") String token);
 
 
     @GetMapping(value = "/cart/{orderNumber}")
-    CartDTO findByOderNumber(@PathVariable("orderNumber") String orderNumber, @RequestHeader("Authorization") String token);
+    CartDTO findByOderNumber(@PathVariable("orderNumber") String orderNumber,
+                             @RequestHeader("Authorization") String token);
 
     @GetMapping(value = "/cart/cart-item/cart/{orderNumber}")
     List<CartItemDTO> findItemByOrderNumber(@PathVariable("orderNumber") String orderNumber, @RequestHeader("Authorization") String token);

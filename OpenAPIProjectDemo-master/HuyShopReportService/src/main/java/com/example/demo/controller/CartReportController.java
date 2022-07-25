@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -30,15 +31,16 @@ public class CartReportController {
     }
     @GetMapping("/cart/export/pdf/{startDate}/{lastDate}")
     public void showReportBetween(HttpServletResponse response,
-                           @PathVariable("startDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                           @PathVariable("lastDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate)
+                                  @PathVariable("startDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                  @PathVariable("lastDate")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate,
+                                  @RequestHeader("Authorization") String token)
             throws IOException {
-        cartReportService.exPortToPDFBetween(response, startDate, lastDate);
+        cartReportService.exPortToPDFBetween(response, startDate, lastDate,token);
         new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/cart/invoice/{orderNumber}/{token}")
-    public void showInvoice(HttpServletResponse response, @PathVariable("orderNumber") String orderNumber,@PathVariable("token") String token) throws IOException {
+    @GetMapping("/cart/invoice/{orderNumber}")
+    public void showInvoice(HttpServletResponse response, @PathVariable("orderNumber") String orderNumber,@RequestHeader("Authorization") String token) throws IOException {
         cartReportService.exPortInvoice(response,orderNumber,token);
         new ResponseEntity<>(HttpStatus.OK);
     }

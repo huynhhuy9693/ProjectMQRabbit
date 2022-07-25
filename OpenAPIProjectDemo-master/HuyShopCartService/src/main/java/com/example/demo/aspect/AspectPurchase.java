@@ -80,9 +80,8 @@ public class AspectPurchase {
 //    }
 
     @AfterReturning(value = "execution(* com.example.demo.service.CartService.deliveryAndUpdate(..)) and args(orderNumber,token)")
-    public void afterUpdateDelivered(JoinPoint joinPoint, String orderNumber, String token)
+    public void afterUpdateDelivered(JoinPoint joinPoint, String orderNumber,String token)
     {
-
         long startTime = System.currentTimeMillis();
         logger.info("print invoice" + orderNumber);
         reportFeignClient.showInvoice(orderNumber,token);

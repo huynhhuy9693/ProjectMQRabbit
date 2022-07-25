@@ -43,7 +43,7 @@ public class CartReportService {
         cartReportExport.export(response);
     }
 
-    public void exPortToPDFBetween(HttpServletResponse response, LocalDate startDate, LocalDate lastDate) throws IOException {
+    public void exPortToPDFBetween(HttpServletResponse response, LocalDate startDate, LocalDate lastDate,String token) throws IOException {
 
 
         response.setContentType("application/pdf");
@@ -54,8 +54,8 @@ public class CartReportService {
         String headerValue = "attachment; filename=cart-report_" + currentDateTime + ".pdf";
         response.setHeader(headerKey,headerValue);
         DecimalFormat formatter = new DecimalFormat("#,###.###");
-        List<CartDTO> cartDTOList = cartFeignClient.findByDateOrderBetween(startDate,lastDate);
-        String totalPrice = formatter.format(cartFeignClient.sumTotalPriceBetween(startDate,lastDate));
+        List<CartDTO> cartDTOList = cartFeignClient.findByDateOrderBetween(startDate,lastDate,token);
+        String totalPrice = formatter.format(cartFeignClient.sumTotalPriceBetween(startDate,lastDate,token));
         int month = startDate.getMonth().getValue();
         int year = startDate.getYear();
         int dayFrom = startDate.getDayOfMonth();

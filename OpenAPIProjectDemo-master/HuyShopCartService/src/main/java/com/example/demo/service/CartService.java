@@ -102,24 +102,23 @@ public class CartService {
         List<Cart> cartList  = cartEntityList.stream().map(item->modelMapper.map(item,Cart.class)).collect(Collectors.toList());
         return cartList;
     }
-    public List<Cart> findByDateOrderBetween(LocalDate startDate, LocalDate lastDate )
+    public List<Cart> findByDateOrderBetween(LocalDate startDate, LocalDate lastDate,String token )
     {
         List<CartEntity> cartEntityList = repository.findByDateOrderBetween(startDate,lastDate);
         List<Cart> cartList = cartEntityList.stream().map(item->modelMapper.map(item,Cart.class)).collect(Collectors.toList());
         return cartList;
     }
 
-    public Long sumTotalPriceBetwenn(LocalDate startDate, LocalDate lastDate)
+    public Long sumTotalPriceBetwenn(LocalDate startDate, LocalDate lastDate,String token)
     {
         Long result = repository.sumByDateOrderBetween(startDate,lastDate);
         return result;
     }
 
     @Transactional
-    public void deliveryAndUpdate(String orderNumber, String token)
+    public void deliveryAndUpdate(String orderNumber,String token)
 
     {
-        System.out.println(token);
         List<CartItemEntity> cartItemEntityList =cartItemRepository.findByOrdernumber(orderNumber);
         List<CartItemDTO> cartItemDTOLis = cartItemEntityList.stream().map(item->modelMapper.map(item, CartItemDTO.class)).collect(Collectors.toList());
         for(CartItemDTO cartItemDTO: cartItemDTOLis)

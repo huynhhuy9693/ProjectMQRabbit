@@ -37,7 +37,8 @@ public class CartController {
     }
 
     @GetMapping(value = "/{orderNumber}")
-    public ResponseEntity<Cart> findByOrderNumber(@PathVariable ("orderNumber") String orderNumber)
+    public ResponseEntity<Cart> findByOrderNumber(@PathVariable ("orderNumber") String orderNumber,
+                                                  @RequestHeader("Authorization") String token)
     {
         return new ResponseEntity<>(cartService.findByOrderNumber(orderNumber), HttpStatus.OK);
     }

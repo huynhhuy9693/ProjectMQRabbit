@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "report-service")
 public interface ReportFeignClient {
 
-    @GetMapping("/report/cart/invoice/{orderNumber}/{token}")
-    void showInvoice(@PathVariable("orderNumber") String orderNumber,@PathVariable("token") String token);
+    @GetMapping("/report/cart/invoice/{orderNumber}/")
+    void showInvoice(@PathVariable("orderNumber") String orderNumber,@RequestHeader("Authorization") String token);
 }

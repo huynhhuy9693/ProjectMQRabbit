@@ -57,27 +57,29 @@ public class CartAdminController implements CartApi {
 
     @GetMapping(value = "/order-date/{startDate}/{lastDate}")
     public ResponseEntity<List<Cart>> findByDateOrderBetween(@PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                                             @PathVariable("lastDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate                            )
+                                                             @PathVariable("lastDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate,
+                                                             @RequestHeader("Authorization") String token)
     {
-        return new ResponseEntity<>(cartService.findByDateOrderBetween(startDate,lastDate),HttpStatus.OK);
+        return new ResponseEntity<>(cartService.findByDateOrderBetween(startDate,lastDate,token),HttpStatus.OK);
     }
 
 
     @GetMapping(value = "/sum-total-price/{startDate}/{lastDate}")
     public ResponseEntity<Long> sumTotalPriceBetween(@PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                                     @PathVariable("lastDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate )
+                                                     @PathVariable("lastDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastDate,
+                                                     @RequestHeader("Authorization") String token)
     {
-        Long result = cartService.sumTotalPriceBetwenn(startDate,lastDate);
+
+        Long result = cartService.sumTotalPriceBetwenn(startDate,lastDate,token);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
 
     @PutMapping(value = "/delivery/update/{orderNumber}")
-    public ResponseEntity<Void> deliveryAndUpdate(@PathVariable("orderNumber") String orderNumber, HttpServletRequest request)
+    public ResponseEntity<Void> deliveryAndUpdate(@PathVariable("orderNumber") String orderNumber,HttpServletRequest request)
     {
-        String requestTokenHeader = request.getHeader("Authorization");
-        System.out.println("---"+ requestTokenHeader);
-        cartService.deliveryAndUpdate(orderNumber,requestTokenHeader);
+        String token = request.getHeader("Authorization");
+        cartService.deliveryAndUpdate(orderNumber,token);
         return  new ResponseEntity<>(HttpStatus.OK);
     }
 
