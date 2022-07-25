@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.http.HttpHeaders;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -63,7 +64,7 @@ public class CartReportService {
         cartReportExport.export(response);
     }
 
-    public void exPortInvoice(HttpServletResponse response, String oderNumber) throws IOException {
+    public void exPortInvoice(HttpServletResponse response, String oderNumber,String token) throws IOException {
 
         response.setContentType("application/pdf");
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
@@ -73,8 +74,8 @@ public class CartReportService {
         String headerValue = "attachment; filename=invoice_" + currentDateTime + ".pdf";
         response.setHeader(headerKey,headerValue);
         NumberFormat formatter = new DecimalFormat("#,###.###");
-        CartDTO cartDTO = cartFeignClient.findByOderNumber(oderNumber);
-        List<CartItemDTO> cartItemDTOList = cartFeignClient.findItemByOrderNumber(oderNumber);
+        CartDTO cartDTO = cartFeignClient.findByOderNumber(oderNumber, token);
+        List<CartItemDTO> cartItemDTOList = cartFeignClient.findItemByOrderNumber(oderNumber,token);
         for (CartItemDTO cartItem: cartItemDTOList) {
             cartItem.setName(productReportService.findById(cartItem.getProductId()).getName());
         }

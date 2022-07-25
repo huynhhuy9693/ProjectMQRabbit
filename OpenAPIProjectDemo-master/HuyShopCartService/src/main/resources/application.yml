@@ -1,4 +1,12 @@
+jwt:
+  secret: huyhuynh
+  get:
+    token:
+      uri: /authenticate
+
 spring:
+  main:
+    allow-circular-references: true
   output:
     ansi:
       enabled: always
@@ -62,13 +70,20 @@ eureka:
       default-zone: 'http://localhost:8761/eureka'
 
 logging:
-  file: C:\Users\HUYNH HUY\OneDrive\Desktop\log\logHuyShop.log
+  file: application.log
   pattern:
     file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
   level:
-    org.springframework.web: ERROR
-    com.example.demo.facade.PurchaseFacade: DEBUG
-    org.hibernate: ERROR
+    org:
+      springframework: INFO
+      hibernate: INFO
+    com:
+      example:
+        demo:
+          facade:
+            PurchaseFacade: INFO
+          controller: INFO
+
 
 #    username: huynhhuy362022@gmail.com
 #    password: vjqhvxlfwbrzsxpz

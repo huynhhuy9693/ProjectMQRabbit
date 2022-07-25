@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,9 +32,9 @@ public interface CartFeignClient {
 
 
     @GetMapping(value = "/cart/{orderNumber}")
-    CartDTO findByOderNumber(@PathVariable("orderNumber") String orderNumber);
+    CartDTO findByOderNumber(@PathVariable("orderNumber") String orderNumber, @RequestHeader("Authorization") String token);
 
     @GetMapping(value = "/cart/cart-item/cart/{orderNumber}")
-    List<CartItemDTO> findItemByOrderNumber(@PathVariable("orderNumber") String orderNumber);
+    List<CartItemDTO> findItemByOrderNumber(@PathVariable("orderNumber") String orderNumber, @RequestHeader("Authorization") String token);
 
 }

@@ -8,10 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -39,9 +37,9 @@ public class CartReportController {
         new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/cart/invoice/{orderNumber}")
-    public void showInvoice(HttpServletResponse response, @PathVariable("orderNumber") String orderNumber) throws IOException {
-        cartReportService.exPortInvoice(response,orderNumber);
+    @GetMapping("/cart/invoice/{orderNumber}/{token}")
+    public void showInvoice(HttpServletResponse response, @PathVariable("orderNumber") String orderNumber,@PathVariable("token") String token) throws IOException {
+        cartReportService.exPortInvoice(response,orderNumber,token);
         new ResponseEntity<>(HttpStatus.OK);
     }
 }

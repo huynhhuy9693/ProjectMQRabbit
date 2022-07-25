@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.controller.CartAuthentication;
 import com.example.demo.dto.*;
 import com.example.demo.entity.CartEntity;
 import com.example.demo.entity.CartItemEntity;
@@ -11,11 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 import javax.transaction.Transactional;
 
+import java.net.http.HttpHeaders;
+import java.net.http.HttpRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -45,6 +48,9 @@ public class CartService {
 
     @Autowired
     ReportFeignClient reportFeignClient;
+
+    @Autowired
+    CartAuthentication cartAuthentication;
 
     public Cart findByOrderNumber(String oderNumber)
     {
@@ -110,8 +116,10 @@ public class CartService {
     }
 
     @Transactional
-    public void deliveryAndUpdate(String orderNumber)
+    public void deliveryAndUpdate(String orderNumber, String token)
+
     {
+        System.out.println(token);
         List<CartItemEntity> cartItemEntityList =cartItemRepository.findByOrdernumber(orderNumber);
         List<CartItemDTO> cartItemDTOLis = cartItemEntityList.stream().map(item->modelMapper.map(item, CartItemDTO.class)).collect(Collectors.toList());
         for(CartItemDTO cartItemDTO: cartItemDTOLis)

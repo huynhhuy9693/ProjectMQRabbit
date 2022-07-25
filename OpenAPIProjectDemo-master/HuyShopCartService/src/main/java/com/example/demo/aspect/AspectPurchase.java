@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -73,27 +74,25 @@ public class AspectPurchase {
 //        }
 //        logger.info("update success");
 //        logger.info("send mail for customer");
-//        Message<Purchase> purchaseMessage = MessageBuilder.withPayload(purchase).build();
-//        this.messageChannel.send(purchaseMessage);
+//        streamBridge.send("handlePurchase", purchase);
 //        logger.info("send mail ok");
 //
 //    }
 
-    @AfterReturning(value = "execution(* com.example.demo.service.CartService.deliveryAndUpdate(..)) and args(orderNumber)")
-    public void afterUpdateDelivered(JoinPoint joinPoint, String orderNumber)
+    @AfterReturning(value = "execution(* com.example.demo.service.CartService.deliveryAndUpdate(..)) and args(orderNumber,token)")
+    public void afterUpdateDelivered(JoinPoint joinPoint, String orderNumber, String token)
     {
+
+        long startTime = System.currentTimeMillis();
         logger.info("print invoice" + orderNumber);
-        reportFeignClient.showInvoice(orderNumber);
+        reportFeignClient.showInvoice(orderNumber,token);
+        logger.info("execution time handle print : " + ((System.currentTimeMillis() - startTime )/1000f));
     }
 
-
-
-
-
-
     @Around(value = "execution(* com.example.demo.controller.CartController.placeOrder(..)) and args(purchase)")
-    public ResponseEntity<Object> handlePurchase(ProceedingJoinPoint joinPoint, Purchase purchase) throws Throwable {
+    public Object handlePurchase(ProceedingJoinPoint joinPoint, Purchase purchase) throws Throwable {
         //before
+        long startTime = System.currentTimeMillis();
         logger.info("start Purchase");
         Object purchaseResponese = null;
 
@@ -117,6 +116,7 @@ public class AspectPurchase {
                     int quantityShop = productFeignClient.getQuantityById(cartItem.getProductId());
                     int result = (quantityShop - quantity);
                     productFeignClient.updateProductQuantityForId(result, cartItem.getProductId());
+                }
                     logger.info("update success");
                     logger.info("send mail for customer");
 //                Message<Purchase> purchaseMessage = MessageBuilder.withPayload(purchase).build();
@@ -126,9 +126,9 @@ public class AspectPurchase {
                     logger.info("send mail for admin ");
                     streamBridge.send("handleAfterOrderSuccess", purchase);
                     logger.info("send mail ok");
+                    logger.info("execution time handle purchase : " + ((System.currentTimeMillis() - startTime )/1000f));
+                    return purchaseResponese;
 
-                    return new ResponseEntity<>(purchaseResponese, HttpStatus.OK);
-                }
             }
 
         } else if (purchase.getCartDTO().getUserOrder() == null) {

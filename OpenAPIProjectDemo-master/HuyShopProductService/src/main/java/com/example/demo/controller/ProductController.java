@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-
+@CrossOrigin(origins = "http://localhost:8081")
 @RequestMapping(value = "/admin-product")
 public class ProductController implements ProductApi {
     @Autowired

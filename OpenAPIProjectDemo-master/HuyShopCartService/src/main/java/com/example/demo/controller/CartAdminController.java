@@ -3,6 +3,8 @@ package com.example.demo.controller;
 
 import com.example.demo.api.CartApi;
 import com.example.demo.model.Cart;
+import com.example.demo.model.JwtRequest;
+import com.example.demo.model.JwtResponse;
 import com.example.demo.service.CartService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.net.http.HttpHeaders;
+import java.net.http.HttpRequest;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -68,9 +73,11 @@ public class CartAdminController implements CartApi {
 
 
     @PutMapping(value = "/delivery/update/{orderNumber}")
-    public ResponseEntity<Void> deliveryAndUpdate(@PathVariable("orderNumber") String orderNumber)
+    public ResponseEntity<Void> deliveryAndUpdate(@PathVariable("orderNumber") String orderNumber, HttpServletRequest request)
     {
-        cartService.deliveryAndUpdate(orderNumber);
+        String requestTokenHeader = request.getHeader("Authorization");
+        System.out.println("---"+ requestTokenHeader);
+        cartService.deliveryAndUpdate(orderNumber,requestTokenHeader);
         return  new ResponseEntity<>(HttpStatus.OK);
     }
 
