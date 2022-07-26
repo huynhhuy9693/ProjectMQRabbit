@@ -10,10 +10,13 @@ spring:
         bindings:
           handlePurchase-in-0:
             destination: handlePurchase
+            group: purchases
           handleAfterOrderSuccess-in-0:
             destination: handleAfterOrderSuccess
+            group: purchases
           handleAfterOrderFalse-in-0:
             destination: handleAfterOrderFalse
+            group: purchases
 
 
 

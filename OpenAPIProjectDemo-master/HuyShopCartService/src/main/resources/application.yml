@@ -78,8 +78,8 @@ logging:
       example:
         demo:
           facade:
-            PurchaseFacade: INFO
-          controller: INFO
+            PurchaseFacade: DEBUG
+          controller: DEBUG
 
 
 #    username: huynhhuy362022@gmail.com

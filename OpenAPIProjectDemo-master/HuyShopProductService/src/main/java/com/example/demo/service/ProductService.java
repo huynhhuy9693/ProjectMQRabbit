@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,8 @@ import javax.servlet.http.Part;
 import javax.transaction.Transactional;
 import java.io.*;
 import com.cloudinary.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -65,8 +68,47 @@ public class ProductService {
         return null;
     }
 
-    public Product save(Product product) {
+    public Product save(Product product, HttpServletRequest httpServletRequest) throws ServletException, IOException {
         ProductEntity request = modelMapper.map(product, ProductEntity.class);
+        //upload file
+        String save_dir="image";
+        String app_path= httpServletRequest.getServletContext().getRealPath("");
+        try{
+            Part p = httpServletRequest.getPart("image");
+            String filename = extractFileName(p);
+            System.out.println("--"+app_path);
+            String save_path = app_path+File.separator+save_dir;
+            File f =new File(save_path);
+            if(!f.exists())
+            {
+                f.mkdir();
+            }
+            File f1 = new File(save_path+"/"+filename);
+            FileOutputStream fos = new FileOutputStream(f1);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            String image = filename;
+            byte b[] = new byte[p.getInputStream().available()];
+
+            System.out.println(p.getInputStream().available());
+            p.getInputStream().read(b);
+
+            bos.write(b);
+            bos.close();
+            fos.close();
+
+            Map upload = cloudinary.uploader().upload(f1, ObjectUtils.emptyMap());
+            product.setImgUrl(upload.get("secure_url").toString());
+            String test = upload.get("url").toString();
+            System.out.println("test" + test);
+            System.out.println(upload.get("secure_url"));
+
+        }catch (Exception e)
+        {
+            e.getCause().printStackTrace();
+        }
+
+
+
         ProductEntity productEntity = repository.save(request);
         Product response = modelMapper.map(productEntity , Product.class);
         return response;
@@ -130,6 +172,34 @@ public class ProductService {
     {
         int result = repository.updateDelieveryForId(delivery,id);
         return result;
+    }
+
+    private String extractFileName(Part part) {
+        // form-data; name="file"; filename="C:\file1.zip"
+        // form-data; name="file"; filename="C:\Note\file2.zip"
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                // C:\file1.zip
+                // C:\Note\file2.zip
+                String clientFileName = s.substring(s.indexOf("=") + 2, s.length() - 1);
+                clientFileName = clientFileName.replace("\\", "/");
+                int i = clientFileName.lastIndexOf('/');
+                // file1.zip
+                // file2.zip
+                return clientFileName.substring(i + 1);
+            }
+        }
+        return null;
+    }
+
+    private Object getFolderUpload() {
+        File folderUpload = new File(System.getProperty("user.home") + "/Uploads");
+        if (!folderUpload.exists()) {
+            folderUpload.mkdirs();
+        }
+        return folderUpload;
     }
 
 }

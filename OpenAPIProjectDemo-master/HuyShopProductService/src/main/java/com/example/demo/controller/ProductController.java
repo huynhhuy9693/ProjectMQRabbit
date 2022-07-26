@@ -15,8 +15,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,27 +49,41 @@ public class ProductController implements ProductApi {
         return new ResponseEntity<>(service.findById(id),HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<Product> createProduct(
-            @Parameter(name = "Product", description = "create new product", required = true)
-            @Valid @RequestBody Product product
-    ) {
-        if(service.save(product)==null)
+//    @Override
+//    public ResponseEntity<Product> createProduct(
+//            @Parameter(name = "Product", description = "create new product", required = true)
+//            @Valid @RequestBody Product product
+//    ) {
+//        if(service.save(product)==null)
+//        {
+//            return new ResponseEntity(HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//
+//    }
+
+    @PostMapping(value = "/product/save-product",produces = { "application/json" })
+        public ResponseEntity<Product> saveProduct(@RequestBody Product product,
+                                                   HttpServletRequest request) throws ServletException, IOException {
+        if(service.save(product,request)==null)
         {
+            System.out.println("save-product");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 
-    @Override
-    public ResponseEntity<Product> updateProduct(
-            @Parameter(name = "id", description = "ID of category to return", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Product", description = "update product", required = true) @Valid @RequestBody Product product
-    ) {
-        service.findById(id);
-        return new ResponseEntity<>(service.save(product),HttpStatus.OK);
-    }
+
+
+//    @Override
+//    public ResponseEntity<Product> updateProduct(
+//            @Parameter(name = "id", description = "ID of category to return", required = true) @PathVariable("id") Long id,
+//            @Parameter(name = "Product", description = "update product", required = true) @Valid @RequestBody Product product
+//    ) {
+//        service.findById(id);
+//        return new ResponseEntity<>(service.save(product),HttpStatus.OK);
+//    }
 
     @Override
 
@@ -112,5 +130,9 @@ public class ProductController implements ProductApi {
         int result = service.updateDeliveryForId(delivery ,id);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
+
+
+
+
 
 }

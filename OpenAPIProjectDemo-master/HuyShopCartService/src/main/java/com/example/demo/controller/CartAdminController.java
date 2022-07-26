@@ -41,9 +41,9 @@ public class CartAdminController implements CartApi {
     }
 
     @GetMapping(value = "/order-date/{orderDate}")
-    public ResponseEntity<List<Cart>> findByOrderDate(@PathVariable("orderDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate orderDate)
+    public ResponseEntity<List<Cart>> findByOrderDate(@PathVariable("orderDate")
+                                                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate orderDate)
     {
-        System.out.println("a");
         return new ResponseEntity<>(cartService.findByOrderDate(orderDate),HttpStatus.OK);
     }
 
@@ -76,9 +76,9 @@ public class CartAdminController implements CartApi {
 
 
     @PutMapping(value = "/delivery/update/{orderNumber}")
-    public ResponseEntity<Void> deliveryAndUpdate(@PathVariable("orderNumber") String orderNumber,HttpServletRequest request)
+    public ResponseEntity<Void> deliveryAndUpdate(@PathVariable("orderNumber") String orderNumber,
+                                                  @RequestHeader("Authorization") String token)
     {
-        String token = request.getHeader("Authorization");
         cartService.deliveryAndUpdate(orderNumber,token);
         return  new ResponseEntity<>(HttpStatus.OK);
     }

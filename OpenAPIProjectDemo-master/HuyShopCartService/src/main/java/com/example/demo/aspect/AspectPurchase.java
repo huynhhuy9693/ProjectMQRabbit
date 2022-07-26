@@ -83,7 +83,7 @@ public class AspectPurchase {
     public void afterUpdateDelivered(JoinPoint joinPoint, String orderNumber,String token)
     {
         long startTime = System.currentTimeMillis();
-        logger.info("print invoice" + orderNumber);
+        logger.info("print invoice " + orderNumber);
         reportFeignClient.showInvoice(orderNumber,token);
         logger.info("execution time handle print : " + ((System.currentTimeMillis() - startTime )/1000f));
     }
@@ -106,6 +106,7 @@ public class AspectPurchase {
             {
                 logger.info("send mail for admin info purchase false");
                 streamBridge.send("handleAfterOrderFalse", purchase);
+                logger.info("send mail ok");
 
             }else
             {
@@ -117,14 +118,17 @@ public class AspectPurchase {
                     productFeignClient.updateProductQuantityForId(result, cartItem.getProductId());
                 }
                     logger.info("update success");
+
                     logger.info("send mail for customer");
 //                Message<Purchase> purchaseMessage = MessageBuilder.withPayload(purchase).build();
 //                this.messageChannel.send(purchaseMessage);
                     streamBridge.send("handlePurchase", purchase);
                     logger.info("send mail ok");
+
                     logger.info("send mail for admin ");
                     streamBridge.send("handleAfterOrderSuccess", purchase);
                     logger.info("send mail ok");
+
                     logger.info("execution time handle purchase : " + ((System.currentTimeMillis() - startTime )/1000f));
                     return purchaseResponese;
 
@@ -132,16 +136,16 @@ public class AspectPurchase {
 
         } else if (purchase.getCartDTO().getUserOrder() == null) {
             logger.error(" User not null ");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if (purchase.getShippingAddress() == null) {
             logger.error(" Address not null ");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else if (purchase.getShippingAddress() == null)
         {
             logger.error("Cart-Item  not null ");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
 
