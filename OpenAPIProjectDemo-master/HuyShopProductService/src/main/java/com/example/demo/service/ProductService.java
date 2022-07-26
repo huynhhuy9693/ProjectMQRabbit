@@ -67,45 +67,45 @@ public class ProductService {
         }
         return null;
     }
-
-    public Product save(Product product, HttpServletRequest httpServletRequest) throws ServletException, IOException {
+    private static final String UPLOAD_DIR = "image";
+    public Product save(Product product)  {
         ProductEntity request = modelMapper.map(product, ProductEntity.class);
         //upload file
-        String save_dir="image";
-        String app_path= httpServletRequest.getServletContext().getRealPath("");
-        try{
-            Part p = httpServletRequest.getPart("image");
-            String filename = extractFileName(p);
-            System.out.println("--"+app_path);
-            String save_path = app_path+File.separator+save_dir;
-            File f =new File(save_path);
-            if(!f.exists())
-            {
-                f.mkdir();
-            }
-            File f1 = new File(save_path+"/"+filename);
-            FileOutputStream fos = new FileOutputStream(f1);
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            String image = filename;
-            byte b[] = new byte[p.getInputStream().available()];
-
-            System.out.println(p.getInputStream().available());
-            p.getInputStream().read(b);
-
-            bos.write(b);
-            bos.close();
-            fos.close();
-
-            Map upload = cloudinary.uploader().upload(f1, ObjectUtils.emptyMap());
-            product.setImgUrl(upload.get("secure_url").toString());
-            String test = upload.get("url").toString();
-            System.out.println("test" + test);
-            System.out.println(upload.get("secure_url"));
-
-        }catch (Exception e)
-        {
-            e.getCause().printStackTrace();
-        }
+//        String save_dir="image";
+//        String app_path= httpServletRequest.getServletContext().getRealPath("");
+//        try{
+//            Part p = httpServletRequest.getPart("image");
+//            String filename = extractFileName(p);
+//            System.out.println("--"+app_path);
+//            String save_path = app_path+File.separator+save_dir;
+//            File f =new File(save_path);
+//            if(!f.exists())
+//            {
+//                f.mkdir();
+//            }
+//            File f1 = new File(save_path+"/"+filename);
+//            FileOutputStream fos = new FileOutputStream(f1);
+//            BufferedOutputStream bos = new BufferedOutputStream(fos);
+//            String image = filename;
+//            byte b[] = new byte[p.getInputStream().available()];
+//
+//            System.out.println(p.getInputStream().available());
+//            p.getInputStream().read(b);
+//
+//            bos.write(b);
+//            bos.close();
+//            fos.close();
+//
+//            Map upload = cloudinary.uploader().upload(f1, ObjectUtils.emptyMap());
+//            product.setImgUrl(upload.get("secure_url").toString());
+//            String test = upload.get("url").toString();
+//            System.out.println("test" + test);
+//            System.out.println(upload.get("secure_url"));
+//
+//        }catch (Exception e)
+//        {
+//            e.getCause().printStackTrace();
+//        }
 
 
 
