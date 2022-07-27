@@ -7,6 +7,8 @@ import com.example.demo.model.Product;
 import com.example.demo.repository.ProductRepository;
 import com.cloudinary.utils.ObjectUtils;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
         maxFileSize = 1024 * 1024 * 50,
         maxRequestSize = 1024 * 1024 * 100
 )
+
 @Service
 public class ProductService {
     @Autowired
@@ -40,6 +43,7 @@ public class ProductService {
     @Autowired
     CartItemFeignClient cartItemFeignClient;
 
+    private Logger logger = LoggerFactory.getLogger(ProductService.class);
     Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
             "cloud_name", "huyhuynh",
             "api_key", "186243663589179",
@@ -68,45 +72,45 @@ public class ProductService {
         return null;
     }
     private static final String UPLOAD_DIR = "image";
-    public Product save(Product product)  {
+    public Product save(Product product, HttpServletRequest httpServletRequest)  {
         ProductEntity request = modelMapper.map(product, ProductEntity.class);
         //upload file
-//        String save_dir="image";
-//        String app_path= httpServletRequest.getServletContext().getRealPath("");
-//        try{
-//            Part p = httpServletRequest.getPart("image");
-//            String filename = extractFileName(p);
-//            System.out.println("--"+app_path);
-//            String save_path = app_path+File.separator+save_dir;
-//            File f =new File(save_path);
-//            if(!f.exists())
-//            {
-//                f.mkdir();
-//            }
-//            File f1 = new File(save_path+"/"+filename);
-//            FileOutputStream fos = new FileOutputStream(f1);
-//            BufferedOutputStream bos = new BufferedOutputStream(fos);
-//            String image = filename;
-//            byte b[] = new byte[p.getInputStream().available()];
-//
-//            System.out.println(p.getInputStream().available());
-//            p.getInputStream().read(b);
-//
-//            bos.write(b);
-//            bos.close();
-//            fos.close();
-//
-//            Map upload = cloudinary.uploader().upload(f1, ObjectUtils.emptyMap());
-//            product.setImgUrl(upload.get("secure_url").toString());
-//            String test = upload.get("url").toString();
-//            System.out.println("test" + test);
-//            System.out.println(upload.get("secure_url"));
-//
-//        }catch (Exception e)
-//        {
-//            e.getCause().printStackTrace();
-//        }
+        String save_dir="image";
+        String app_path= httpServletRequest.getServletContext().getRealPath("");
+        logger.debug("app_path : "+app_path);
+        try{
+            Part p = httpServletRequest.getPart("image");
+            logger.debug("path : " +httpServletRequest.getPart("image"));
+            String filename = extractFileName(p);
+            logger.debug("file name : " +filename);
+            String save_path = app_path+File.separator+save_dir;
+            logger.debug("save_path :" +save_path);
+            File f =new File(save_path);
+            if(!f.exists())
+            {
+                f.mkdir();
+            }
+            File f1 = new File(save_path+"/"+filename);
+            logger.debug("file : " +f1);
+            FileOutputStream fos = new FileOutputStream(f1);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            String image = filename;
+            byte b[] = new byte[p.getInputStream().available()];
+            p.getInputStream().read(b);
 
+            bos.write(b);
+            bos.close();
+            fos.close();
+
+            Map upload = cloudinary.uploader().upload(f1, ObjectUtils.emptyMap());
+            logger.debug("upload : "+upload);
+            logger.debug("secure_url : " +upload.get("secure_url"));
+            request.setImgUrl(upload.get("secure_url").toString());
+
+        }catch (Exception e)
+        {
+            e.getCause().printStackTrace();
+        }
 
 
         ProductEntity productEntity = repository.save(request);
@@ -178,6 +182,7 @@ public class ProductService {
         // form-data; name="file"; filename="C:\file1.zip"
         // form-data; name="file"; filename="C:\Note\file2.zip"
         String contentDisp = part.getHeader("content-disposition");
+        logger.debug("contentDisp : " +contentDisp );
         String[] items = contentDisp.split(";");
         for (String s : items) {
             if (s.trim().startsWith("filename")) {

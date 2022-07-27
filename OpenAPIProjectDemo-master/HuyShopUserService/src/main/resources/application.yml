@@ -13,16 +13,6 @@ spring:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
 
-  rabbitmq:
-    host: localhost
-    password: guest
-    port: 15672
-    username: guest
-    exchange: user.exchange
-    queue: user.queue
-    routingkey: user.routingkey
-
-
   datasource:
     platform: postgresql
     url: jdbc:postgresql://localhost:5432/HuyShop

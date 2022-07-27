@@ -27,9 +27,6 @@ public class PurchaseFacade {
     CartRepository repository;
 
     @Autowired
-    MailFeignClient mailFeignClient;
-
-    @Autowired
     UserFeignClient userFeignClient;
 
     @Autowired
@@ -119,7 +116,7 @@ public class PurchaseFacade {
             );
         }
 
-        //save DB and update quantity in tabble Product
+        //save DB
         CartEntity cart = modelMapper.map(cartDTO, CartEntity.class);
         cart.setUserNameOrder(cartDTO.getUserOrder().getUserName());
         checkPromotion(purchase, cart);
@@ -131,10 +128,10 @@ public class PurchaseFacade {
 
         LocalDate localDate = LocalDate.now();
         cart.setDateOrder(localDate);
-        if (purchase.getStatus().equalsIgnoreCase("FALSE"))
+        if (purchase.getStatus().equalsIgnoreCase("FALSE") || cartItemDTOList.isEmpty())
         {
             purchase.setStatus("FALSE");
-            return null;
+            return new PurchaseResponse(oderNumber);
         }
         repository.save(cart);
         purchase.setStatus("SUCCESS");

@@ -19,9 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.web.bind.annotation.RequestHeader;
 
-import java.util.List;
 
 
 @Aspect
@@ -50,6 +48,7 @@ public class AspectPurchase {
     public AspectPurchase(StreamBridge streamBridge) {
         this.streamBridge = streamBridge;
     }
+
 //    @Before("execution(* com.example.demo.controller.CartController.placeOrder(..))")
 //    public void beforePurchase(JoinPoint joinPoint)
 //    {

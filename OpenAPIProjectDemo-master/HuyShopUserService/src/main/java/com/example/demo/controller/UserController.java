@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import javax.ws.rs.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -84,5 +85,12 @@ public class UserController implements UserApi {
     public ResponseEntity<List<User>> findALlByUserNameAndPassword()
     {
         return new ResponseEntity<>(service.findALlByUserNameAndPassword(), HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/user/pass-word/{id}")
+    public ResponseEntity<User> findPassWordById(@PathVariable("id") Long id)
+    {
+        return new ResponseEntity<>(service.findPassWordById(id),HttpStatus.OK);
     }
 }

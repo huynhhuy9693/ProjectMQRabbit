@@ -62,26 +62,27 @@ public class ProductController implements ProductApi {
 //
 //    }
 
-    @PostMapping(value = "/product/save-product",consumes = "multipart/form-data")
+    @PostMapping(value = "/product/save-product")
 
-        public ResponseEntity<Product> saveProduct(@RequestBody Product product
-                                                   )  {
-        if(service.save(product)==null)
+        public ResponseEntity<Product> saveProduct(@ModelAttribute Product product, HttpServletRequest request)  {
+
+        Product response = service.save(product, request);
+        if(response==null)
         {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
 
     }
 
-    @Override
-    public ResponseEntity<Product> updateProduct(
-            @Parameter(name = "id", description = "ID of category to return", required = true) @PathVariable("id") Long id,
-            @Parameter(name = "Product", description = "update product", required = true) @Valid @RequestBody Product product
-    ) {
-        service.findById(id);
-        return new ResponseEntity<>(service.save(product),HttpStatus.OK);
-    }
+//    @Override
+//    public ResponseEntity<Product> updateProduct(
+//            @Parameter(name = "id", description = "ID of category to return", required = true) @PathVariable("id") Long id,
+//            @Parameter(name = "Product", description = "update product", required = true) @Valid @RequestBody Product product
+//    ) {
+//        service.findById(id);
+//        return new ResponseEntity<>(service.save(product),HttpStatus.OK);
+//    }
 
     @Override
 

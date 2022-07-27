@@ -14,6 +14,8 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
     @Query("SELECT u.userName,u.passWord from UserEntity u ")
     List<UserEntity> findAllUserNameAndPassword();
+
+    UserEntity findPassWordById(Long id);
 }
 
 

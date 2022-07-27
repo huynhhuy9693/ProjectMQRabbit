@@ -2,21 +2,22 @@ server:
   port: 8200
 
 spring:
-  rabbitmq:
-    host: localhost
-    password: guest
-    port: 15672
-    username: guest
-    exchange: user.exchange
-    queue: user.queue
-    routingkey: user.routingkey
+  cloud:
+    function:
+      definition: handleSendMail;
+    stream:
+      bindings:
+        handleSendMail-in-0:
+          destination: handleSendMail
+          group: users
+
 
 
   mail:
     host: smtp.gmail.com
     port: '587'
-    username: huynhhuy9693@gmail.com
-    password: cyvnmufgfyvzqtvw
+    username: huynhhuy362022@gmail.com
+    password: vjqhvxlfwbrzsxpz
     properties:
       mail:
         smtp:
@@ -29,3 +30,5 @@ spring:
             required: true
           ssl:
             trust: smtp.gmail.com
+#    username: huynhhuy362022@gmail.com
+#    password: vjqhvxlfwbrzsxpz

@@ -1,4 +1,4 @@
-package com.example.demo.source;
+package com.example.demo.reactive;
 
 
 import org.springframework.cloud.stream.annotation.Input;

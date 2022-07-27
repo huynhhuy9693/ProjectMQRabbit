@@ -3,7 +3,7 @@ package com.example.demo.service;
 
 
 import com.example.demo.model.Purchase;
-import com.example.demo.source.PurchaseBinding;
+import com.example.demo.reactive.PurchaseBinding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +12,6 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
-
-
-import java.util.function.Consumer;
 
 @Component
 @EnableBinding(PurchaseBinding.class)

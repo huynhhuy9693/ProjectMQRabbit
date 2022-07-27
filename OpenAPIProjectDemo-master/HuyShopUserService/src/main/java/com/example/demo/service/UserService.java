@@ -22,14 +22,6 @@ public class UserService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    RabbitTemplate rabbitTemplate;
-
-    @Value("${spring.rabbitmq.exchange}")
-    private String exchange;
-
-    @Value("${spring.rabbitmq.routingkey}")
-    private String routingkey;
 
     public List<User> findAll()
     {
@@ -56,7 +48,6 @@ public class UserService {
         UserEntity request = modelMapper.map(user, UserEntity.class);
         UserEntity userEntity = repository.save(request);
         User response = modelMapper.map(userEntity , User.class);
-        rabbitTemplate.convertAndSend(exchange,routingkey,response);
         return response;
     }
     public void delete(Long id)
@@ -94,6 +85,13 @@ public class UserService {
             e.getCause().printStackTrace();
         }
             return null;
+    }
+
+    public User findPassWordById(Long id)
+    {
+        UserEntity request = repository.findPassWordById(id);
+        User response = modelMapper.map(request, User.class);
+        return response;
     }
 
 }

@@ -318,8 +318,6 @@ components:
     Role:
       description: This is Role Model
       type: object
-      required:
-        - id
       properties:
         id:
           type: integer
@@ -332,8 +330,6 @@ components:
     User:
       description: This is User Model
       type: object
-      required:
-        - id
       properties:
         id:
           type: integer

@@ -1,4 +1,7 @@
 spring:
+  output:
+    ansi:
+      enabled: always
   servlet:
     multipart:
       enabled: true
@@ -38,3 +41,13 @@ eureka:
 #  cloud_name: '"huyhuynh"'
 #  api_key: '"186243663589179"'
 #  api_secret: '"xIhyZNk6NYFIuMSHRhZP0srJL_k"'
+logging:
+  level:
+    org:
+      springframework: INFO
+      hibernate: INFO
+    com:
+      example:
+        demo:
+          service: DEBUG
+          controller: DEBUG
