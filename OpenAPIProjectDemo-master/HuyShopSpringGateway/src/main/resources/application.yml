@@ -28,10 +28,10 @@ spring:
           uri: http://localhost:8085/
           predicates:
             - Path=/mail/**
-        - id: security
-          uri: http://localhost:9999/
+        - id: payment
+          uri: http://localhost:8086/
           predicates:
-            - Path=/security/**
+            - Path=/payment/**
 
   application:
     name: gateway-service

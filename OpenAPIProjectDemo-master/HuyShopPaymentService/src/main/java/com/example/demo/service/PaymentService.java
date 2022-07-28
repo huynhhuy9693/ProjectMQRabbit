@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,23 +31,15 @@ public class PaymentService {
     }
 
     public PaymentDTO findById(int id) {
-        for (Payment request : paymentRepository.findAll()) {
-            if (request.getId() == id) {
-                PaymentDTO response = modelMapper.map(request, PaymentDTO.class);
-                return response;
-            }
-        }
-        return null;
+        Optional<Payment> payment = paymentRepository.findById(id);
+        PaymentDTO paymentDTO = modelMapper.map(payment,PaymentDTO.class);
+        return paymentDTO;
     }
 
     public PaymentDTO findByName(String name) {
-        for (Payment request : paymentRepository.findAll()) {
-            if (request.getName().equalsIgnoreCase(name)) {
-                PaymentDTO response = modelMapper.map(request, PaymentDTO.class);
-                return response;
-            }
-        }
-        return null;
+        Payment payment = paymentRepository.findByName(name);
+        PaymentDTO paymentDTO = modelMapper.map(payment,PaymentDTO.class);
+        return paymentDTO;
     }
 
     public PaymentDTO save(PaymentDTO paymentDTO) {

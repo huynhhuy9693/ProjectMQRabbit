@@ -42,8 +42,8 @@ public class UserController implements UserApi {
     public ResponseEntity<User> createUser(
             @Parameter(name = "User", description = "create new user", required = true) @Valid @RequestBody User user
     ) {
-
-        return new ResponseEntity<>(service.save(user),HttpStatus.OK);
+        User response = service.save(user);
+        return new ResponseEntity<>(response,HttpStatus.OK);
 
     }
 
@@ -75,9 +75,9 @@ public class UserController implements UserApi {
 
     @GetMapping(value = "/users/{id}")
     @RolesAllowed("user")
-    public  ResponseEntity<UserEntity> findByUsersId(@PathVariable ("id") Long id)
+    public  ResponseEntity<User> findByUsersId(@PathVariable ("id") Long id)
     {
-        UserEntity user = service.findByUserId(id);
+        User user = service.findByUserId(id);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
 

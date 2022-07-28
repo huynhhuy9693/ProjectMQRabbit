@@ -1,13 +1,19 @@
 package com.example.demo.service;
 
 
+import com.example.demo.aspect.UserAOP;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.model.User;
+import com.example.demo.reactive.UserBinding;
 import com.example.demo.repository.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,11 +22,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@EnableBinding(UserBinding.class)
 public class UserService {
     @Autowired
     private UserRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
+    private Logger logger = LoggerFactory.getLogger(UserService.class);
 
 
     public List<User> findAll()
@@ -64,16 +73,12 @@ public class UserService {
     }
 
 
-    public UserEntity findByUserId(Long id)
+    public User findByUserId(Long id)
     {
-        for(UserEntity request : repository.findAll())
-        {
-            if(request.getId()==id)
-            {
-               return request;
-            }
-        }
-        return null;
+        Optional<UserEntity> request = repository.findById(id);
+        User reponse = modelMapper.map(request, User.class);
+        return reponse;
+
     }
 
     public List<User> findALlByUserNameAndPassword() {
@@ -92,6 +97,12 @@ public class UserService {
         UserEntity request = repository.findPassWordById(id);
         User response = modelMapper.map(request, User.class);
         return response;
+    }
+
+    @StreamListener(target = UserBinding.SEND_MESS)
+    public void receiveMess(User user)
+    {
+        logger.info("send mail success for user " + user.getUserName());
     }
 
 }

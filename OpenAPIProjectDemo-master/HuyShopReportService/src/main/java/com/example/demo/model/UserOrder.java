@@ -12,6 +12,7 @@ public class UserOrder {
 
     private Long id;
     private String userName;
+    private String passWord;
     private String address;
     private String phone;
     private  String email;

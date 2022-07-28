@@ -1,4 +1,12 @@
 spring:
+  cloud:
+    function:
+      definition: handleAfterSendMail;
+    stream:
+      bindings:
+        handleAfterSendMail-in-0:
+          destination: handleAfterSendMail
+          group: users
   jpa:
     database: POSTGRESQL
     show-sql: true

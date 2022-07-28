@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.JwtRequest;
+import com.example.demo.model.UserOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,14 +23,14 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        for (JwtRequest j : userFeignClient.findAll()) {
 
-            if (j.getUserName().equalsIgnoreCase(username))
+        UserOrder userOrder = userFeignClient.findByUserName(username);
+            if (userOrder.getUserName().equalsIgnoreCase(username))
             {
-                return new User(j.getUserName(),passwordEncoder().encode(j.getPassWord()),
+                return new User(userOrder.getUserName(),passwordEncoder().encode(userOrder.getPassWord()),
                         new ArrayList<>());
             }
-        }
+
         return null;
 
     }

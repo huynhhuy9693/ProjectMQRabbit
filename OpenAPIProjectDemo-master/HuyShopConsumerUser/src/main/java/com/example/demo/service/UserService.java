@@ -11,6 +11,7 @@ import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,9 @@ import org.springframework.stereotype.Component;
 public class UserService {
 
     private JavaMailSender mailSender;
+
+    @Autowired
+    StreamBridge streamBridge;
     @Autowired
     public UserService(JavaMailSender javaMailSender)
     {
@@ -39,6 +43,8 @@ public class UserService {
             mailMessage.setSubject(" Thank you ");
             mailMessage.setText("Welcome " + user.getUserName());
             mailSender.send(mailMessage);
+            logger.info("send mail ok");
+            streamBridge.send("handleAfterSendMail",user);
         }else
         {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -46,6 +52,9 @@ public class UserService {
             mailMessage.setSubject("Admin notification update info user : " + user.getName());
             mailMessage.setText("Info updated success ");
             mailSender.send(mailMessage);
+            logger.info("send mail ok");
+            streamBridge.send("handleAfterSendMail",user);
+
         }
 
 

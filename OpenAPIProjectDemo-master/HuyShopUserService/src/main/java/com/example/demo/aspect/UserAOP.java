@@ -36,19 +36,21 @@ public class UserAOP {
 //        logger.info("send mail ok");
 //    }
      @Around(value = "execution(* com.example.demo.service.UserService.save(..)) and args(user)")
-    public void handleSendMail(ProceedingJoinPoint joinPoint, User user) throws Throwable {
+    public Object handleSendMail(ProceedingJoinPoint joinPoint, User user) throws Throwable {
         if(user.getId()==null)
         {
-            joinPoint.proceed();
+            Object userResponse = joinPoint.proceed();
             logger.info("send mail for new customer");
             streamBridge.send("handleSendMail",user);
             logger.info("send mail ok");
+            return userResponse;
         }else
         {
-            joinPoint.proceed();
+            Object userResponse=joinPoint.proceed();
             logger.info("send mail for customer update info");
             streamBridge.send("handleSendMail",user);
             logger.info("send mail ok");
+            return userResponse;
         }
     }
 

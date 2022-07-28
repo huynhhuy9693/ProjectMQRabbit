@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,23 +28,15 @@ public class VoucherService {
     }
 
     public VoucherDTO findById(int id) {
-        for (Voucher request : voucherRepository.findAll()) {
-            if (request.getId() == id) {
-                VoucherDTO response = modelMapper.map(request, VoucherDTO.class);
-                return response;
-            }
-        }
-        return null;
+        Optional<Voucher> voucher = voucherRepository.findById(id);
+        VoucherDTO voucherDTO = modelMapper.map(voucher, VoucherDTO.class);
+        return voucherDTO;
     }
 
     public VoucherDTO findByName(String name) {
-        for (Voucher request : voucherRepository.findAll()) {
-            if (request.getName().equalsIgnoreCase(name)) {
-                VoucherDTO response = modelMapper.map(request, VoucherDTO.class);
-                return response;
-            }
-        }
-        return null;
+        Voucher voucher = voucherRepository.findByName(name);
+        VoucherDTO voucherDTO = modelMapper.map(voucher, VoucherDTO.class);
+        return voucherDTO;
     }
 
     public VoucherDTO save(VoucherDTO voucherDTO) {
