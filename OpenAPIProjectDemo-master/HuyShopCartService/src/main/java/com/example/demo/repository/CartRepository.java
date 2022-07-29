@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,11 +17,13 @@ import java.util.List;
 public interface
 CartRepository extends JpaRepository<CartEntity,Long> {
 
-    CartEntity findByOderNumber(String oderNumber);
+    @Query("Select c from CartEntity c where c.oderNumber=:orderNumber ")
+    CartEntity findByOderNumber(@Param("orderNumber") String orderNumber);
 
     CartEntity findByUserNameOrder(String userNameOrder);
 
     @Modifying
+    @Transactional
     @Query("Update CartEntity c set c.status=:status where c.oderNumber=:orderNumber")
     Integer updateStatusByOrdernumber(@Param("status") String status,@Param("orderNumber") String orderNumber);
 

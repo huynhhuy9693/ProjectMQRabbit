@@ -136,7 +136,7 @@ public class ProductService {
        return quantity;
     }
 
-    @Transactional
+
     public Integer updateProductQuantityForId(int quantityPresent,Long id)
     {
         int result = repository.updateProductQuantityForId(quantityPresent,id);

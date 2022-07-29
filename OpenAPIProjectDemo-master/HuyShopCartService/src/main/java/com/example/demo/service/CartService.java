@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.aspect.AspectPurchase;
 import com.example.demo.controller.CartAuthentication;
 import com.example.demo.dto.*;
 import com.example.demo.entity.CartEntity;
@@ -11,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -51,6 +53,11 @@ public class CartService {
 
     @Autowired
     CartAuthentication cartAuthentication;
+
+    @Autowired
+    StreamBridge streamBridge;
+
+    private Logger logger = LoggerFactory.getLogger(CartService.class);
 
     public Cart findByOrderNumber(String oderNumber)
     {
@@ -115,7 +122,7 @@ public class CartService {
         return result;
     }
 
-    @Transactional
+
     public void deliveryAndUpdate(String orderNumber,String token)
 
     {
@@ -128,7 +135,8 @@ public class CartService {
             int result = quantityDelivery+quantityCartItem;
             productFeignClient.updateDeliveryForId(result, cartItemDTO.getProductId());
         }
-        repository.updateStatusByOrdernumber("DELIVERED",orderNumber);
+         repository.updateStatusByOrdernumber("DELIVERED", orderNumber);
+
     }
 
 }

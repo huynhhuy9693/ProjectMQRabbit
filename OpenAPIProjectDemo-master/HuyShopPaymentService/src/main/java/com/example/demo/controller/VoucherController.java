@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/promotion/voucher")
+@RequestMapping(value = "/promotion")
 public class VoucherController {
 
     @Autowired
@@ -23,41 +23,41 @@ public class VoucherController {
     PaymentService paymentService;
 
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "voucher/all")
     public ResponseEntity<List<VoucherDTO>> findAll()
     {
         List<VoucherDTO> voucherDTOList = voucherService.findAll();
         return new ResponseEntity<>(voucherDTOList, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "voucher/{id}")
     public ResponseEntity<VoucherDTO> findById(@PathVariable("id") int id)
     {
         VoucherDTO voucherDTO = voucherService.findById(id);
         return new ResponseEntity<>(voucherDTO,HttpStatus.OK);
     }
 
-    @GetMapping(value = "/name/{name}")
+    @GetMapping(value = "voucher/name/{name}")
     public ResponseEntity<VoucherDTO> findByName(@PathVariable("name") String name)
     {
         VoucherDTO voucherDTO = voucherService.findByName(name);
         return new ResponseEntity<>(voucherDTO,HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{id}")
+    @PostMapping(value = "voucher/{id}")
     public ResponseEntity<VoucherDTO> save(@RequestBody VoucherDTO voucherDTO)
     {
         return new ResponseEntity<>(voucherService.save(voucherDTO),HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "voucher/{id}")
     public ResponseEntity<VoucherDTO> edit(@RequestBody VoucherDTO voucherDTO)
     {
         return new ResponseEntity<>(voucherService.save(voucherDTO),HttpStatus.OK);
     }
 
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "voucher/{id}")
     public void delete(@PathVariable ("id") int id)
     {
         voucherService.delete(id);

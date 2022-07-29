@@ -10,9 +10,12 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.transaction.Transactional;
+import java.beans.Transient;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
@@ -37,6 +40,8 @@ public class PurchaseFacade {
 
     @Autowired
     PaymentFeignClient paymentFeignClient;
+    @Autowired
+    StreamBridge streamBridge;
 
     private final Logger logger = LoggerFactory.getLogger(PurchaseFacade.class);
 
@@ -47,6 +52,7 @@ public class PurchaseFacade {
     private static final String NO_VOUCHER = "NO-VOUCHER";
     private static final String NO_PAYMENT = "ATM";
 
+    @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) throws MalformedURLException, MessagingException, UnsupportedEncodingException, JsonProcessingException {
 
         int numberOfCharactor = 6;
@@ -134,6 +140,8 @@ public class PurchaseFacade {
             return new PurchaseResponse(oderNumber);
         }
         repository.save(cart);
+        logger.info("sync data to report ");
+        streamBridge.send("dataSyncFromCart", cart);
         purchase.setStatus("SUCCESS");
         return new PurchaseResponse(oderNumber);
 

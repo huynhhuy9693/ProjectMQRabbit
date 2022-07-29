@@ -7,14 +7,34 @@ eureka:
       default-zone: 'http://localhost:8761/eureka'
 
 spring:
+  cloud:
+    stream:
+      bindings:
+        dataSyncFromCart-in-0:
+          destination: dataSyncFromCart
+          group: dataSync
   application:
     name: report-service
+
   main:
     allow-circular-references: true
     output:
       ansi:
         enabled: always
-
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+  datasource:
+    platform: postgresql
+    url: jdbc:postgresql://localhost:5432/HuyShop
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
 jwt:
   secret: huyhuynh
   get:

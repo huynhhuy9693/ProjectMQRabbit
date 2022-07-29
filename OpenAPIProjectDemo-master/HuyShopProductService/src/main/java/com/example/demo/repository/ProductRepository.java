@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -19,6 +20,7 @@ public interface ProductRepository extends JpaRepository<ProductEntity,Long> {
     Integer getQuantityById(@Param("id") Long id);
 
     @Modifying
+    @Transactional
     @Query("update ProductEntity p set p.quantityPresent=:quantityPresent where p.id=:id")
     Integer updateProductQuantityForId(@Param("quantityPresent") int quantityPresent, @Param("id") Long id);
 

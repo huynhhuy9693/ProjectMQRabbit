@@ -16,7 +16,7 @@ public interface PaymentFeignClient {
     @GetMapping(value = "/promotion/voucher/name/{name}")
     VoucherDTO getByNameVoucher(@PathVariable ("name") String name);
 
-    @GetMapping(value = "/payment/name/{name}")
+    @GetMapping(value = "/promotion/payment/name/{name}")
     PaymentDTO getByNamePayment(@PathVariable ("name") String name);
 
 

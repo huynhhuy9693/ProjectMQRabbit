@@ -6,6 +6,9 @@ import com.example.demo.dto.CartDTO;
 import com.example.demo.dto.CartItemDTO;
 import com.example.demo.dto.Purchase;
 import com.example.demo.dto.PurchaseResponse;
+import com.example.demo.entity.CartEntity;
+import com.example.demo.repository.CartRepository;
+import com.example.demo.service.CartService;
 import com.example.demo.service.ProductFeignClient;
 import com.example.demo.service.ReportFeignClient;
 import org.aspectj.lang.JoinPoint;
@@ -35,6 +38,8 @@ public class AspectPurchase {
 //        messageChannel = binding.handlePurchase();
 //    }
 
+    @Autowired
+    CartRepository repository;
 
     @Autowired
     ProductFeignClient productFeignClient;
@@ -79,11 +84,13 @@ public class AspectPurchase {
 //    }
 
     @AfterReturning(value = "execution(* com.example.demo.service.CartService.deliveryAndUpdate(..)) and args(orderNumber,token)")
-    public void afterUpdateDelivered(JoinPoint joinPoint, String orderNumber,String token)
-    {
+    public void afterUpdateDelivered(JoinPoint joinPoint, String orderNumber,String token) throws Throwable {
+
+
         long startTime = System.currentTimeMillis();
-        logger.info("print invoice " + orderNumber);
-        reportFeignClient.showInvoice(orderNumber,token);
+        CartEntity cart = repository.findByOderNumber(orderNumber);
+        logger.info("cart-status: " +cart.getStatus());
+        streamBridge.send("dataSyncFromCart", cart);
         logger.info("execution time handle print : " + ((System.currentTimeMillis() - startTime )/1000f));
     }
 

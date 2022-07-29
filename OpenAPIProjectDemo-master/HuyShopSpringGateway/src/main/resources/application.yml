@@ -31,7 +31,7 @@ spring:
         - id: payment
           uri: http://localhost:8086/
           predicates:
-            - Path=/payment/**
+            - Path=/promotion/**
 
   application:
     name: gateway-service
