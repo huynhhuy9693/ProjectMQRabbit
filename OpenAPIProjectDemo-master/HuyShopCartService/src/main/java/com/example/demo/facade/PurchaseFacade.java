@@ -1,21 +1,23 @@
 package com.example.demo.facade;
 
+
 import com.example.demo.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.example.demo.dto.*;
 import com.example.demo.entity.CartEntity;
 import com.example.demo.entity.CartItemEntity;
 import com.example.demo.repository.CartRepository;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
-import java.beans.Transient;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.time.LocalDate;
@@ -140,8 +142,6 @@ public class PurchaseFacade {
             return new PurchaseResponse(oderNumber);
         }
         repository.save(cart);
-        logger.info("sync data to report ");
-        streamBridge.send("dataSyncFromCart", cart);
         purchase.setStatus("SUCCESS");
         return new PurchaseResponse(oderNumber);
 

@@ -1,17 +1,24 @@
 package com.example.demo.entity;
 
 
-import com.example.demo.dto.UserOrder;
-import com.example.demo.dto.VoucherDTO;
+
+import com.example.demo.events.SaveEventListener;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.event.spi.PostInsertEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import javax.persistence.*;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.*;
 
+@Slf4j
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,7 +26,9 @@ import java.util.*;
 @Builder
 @Entity
 @Table(name = "cart")
+@EntityListeners(SaveEventListener.class)
 public class CartEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +64,6 @@ public class CartEntity {
         cartItemEntityList.add(item);
         item.setCartEntity(this);
     }
-
 
 
 }

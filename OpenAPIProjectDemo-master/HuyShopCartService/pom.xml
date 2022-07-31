@@ -154,6 +154,13 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.6.9.Final</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
 <!--		<dependency>-->
 <!--			<groupId>com.fasterxml.jackson.datatype</groupId>-->
@@ -220,5 +227,7 @@
 			</plugin>
 		</plugins>
 	</build>
+
+
 
 </project>

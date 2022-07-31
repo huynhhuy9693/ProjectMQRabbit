@@ -135,7 +135,7 @@ public class CartService {
             int result = quantityDelivery+quantityCartItem;
             productFeignClient.updateDeliveryForId(result, cartItemDTO.getProductId());
         }
-         repository.updateStatusByOrdernumber("DELIVERED", orderNumber);
+            repository.updateStatusByOrdernumber("DELIVERED", orderNumber);
 
     }
 
