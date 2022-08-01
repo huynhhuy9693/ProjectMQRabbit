@@ -21,4 +21,5 @@ public class CartItemDTO {
     private String name;
     private Long price;
     private int quantity;
+    private boolean check;
 }

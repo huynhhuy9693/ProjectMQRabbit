@@ -80,13 +80,14 @@ public class PurchaseFacade {
             int quantity = productFeignClient.getQuantityById(cartItemDTOList.get(i).getProductId());
             {
                 if (quantity < cartItemDTOList.get(i).getQuantity()) {
-                    cartItemDTOList.remove(cartItemDTOList.get(i));
-                    i--;
+                    cartItemDTOList.get(i).setCheck(false);
                 }else
                 {
+                    cartItemDTOList.get(i).setCheck(true);
                     cartItemDTOList.get(i).setPrice(productFeignClient.findById(cartItemDTOList.get(i).getProductId()).getPrice());
                     cartItemDTOList.get(i).setName(productFeignClient.findById(cartItemDTOList.get(i).getProductId()).getName());
                     totalPrice+=Double.valueOf(cartItemDTOList.get(i).getPrice()*cartItemDTOList.get(i).getQuantity());
+
                 }
             }
         }
@@ -126,16 +127,22 @@ public class PurchaseFacade {
 
         //save DB
         CartEntity cart = modelMapper.map(cartDTO, CartEntity.class);
-        cart.setUserNameOrder(cartDTO.getUserOrder().getUserName());
+        cart.setUserOrder(cartDTO.getUserOrder().getUserName());
         checkPromotion(purchase, cart);
 
-        for (CartItemDTO cartItemDTO : cartItemDTOList) {
-            CartItemEntity cartItemEntity = modelMapper.map(cartItemDTO, CartItemEntity.class);
+        for (int i =0; i<cartItemDTOList.size();i++) {
+            CartItemEntity cartItemEntity = modelMapper.map(cartItemDTOList.get(i), CartItemEntity.class);
+            if (cartItemDTOList.get(i).isCheck()==false)
+            {
+                cartItemDTOList.remove(cartItemDTOList.get(i));
+                i--;
+            }else
             cart.add(cartItemEntity);
         }
 
         LocalDate localDate = LocalDate.now();
         cart.setDateOrder(localDate);
+
         if (purchase.getStatus().equalsIgnoreCase("FALSE") || cartItemDTOList.isEmpty())
         {
             purchase.setStatus("FALSE");

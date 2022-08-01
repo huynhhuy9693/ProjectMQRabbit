@@ -20,7 +20,7 @@ CartRepository extends JpaRepository<CartEntity,Long> {
     @Query("Select c from CartEntity c where c.oderNumber=:orderNumber ")
     CartEntity findByOderNumber(@Param("orderNumber") String orderNumber);
 
-    CartEntity findByUserNameOrder(String userNameOrder);
+    CartEntity findByUserOrder(String userOrder);
 
     @Modifying
     @Transactional

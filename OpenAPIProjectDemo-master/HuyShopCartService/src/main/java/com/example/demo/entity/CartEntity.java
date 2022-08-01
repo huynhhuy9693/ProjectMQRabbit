@@ -2,15 +2,11 @@ package com.example.demo.entity;
 
 
 
-import com.example.demo.events.SaveEventListener;
+import com.example.demo.events.SaveCartEventListener;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.event.spi.PostInsertEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 import javax.persistence.*;
@@ -26,7 +22,7 @@ import java.util.*;
 @Builder
 @Entity
 @Table(name = "cart")
-@EntityListeners(SaveEventListener.class)
+@EntityListeners(SaveCartEventListener.class)
 public class CartEntity {
 
 
@@ -44,7 +40,7 @@ public class CartEntity {
     @Column(name = "date_order")
     private LocalDate dateOrder;
     private String shippingAddress;
-    private String userNameOrder;
+    private String userOrder;
     private String email;
     private Boolean isSending;
     private String voucher;
@@ -56,7 +52,8 @@ public class CartEntity {
 
     public void add(CartItemEntity item) {
 
-        if (item != null) {
+        if (item != null)
+        {
             if(cartItemEntityList == null) {
                 cartItemEntityList = new LinkedList<>();
             }

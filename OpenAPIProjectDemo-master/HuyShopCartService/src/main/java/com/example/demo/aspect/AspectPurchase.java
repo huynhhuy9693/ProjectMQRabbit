@@ -64,22 +64,22 @@ public class AspectPurchase {
         logger.error("purchase false");
     }
 
-    @AfterReturning(value = "execution(* com.example.demo.facade.PurchaseFacade.placeOrder(..)) and args(purchase)")
-    public void afterPurchaseSuccess(JoinPoint joinPoint, Purchase purchase)
-    {
-        logger.info("purchase success");
-        for (CartItemDTO cartItem:purchase.getCartDTO().getCartItemDTOList()) {
-            int quantity = cartItem.getQuantity();
-            int quantityShop = productFeignClient.getQuantityById(cartItem.getProductId());
-            int result = (quantityShop - quantity);
-            productFeignClient.updateProductQuantityForId(result, cartItem.getProductId());
-        }
-        logger.info("update success");
-        logger.info("send mail for customer");
-        streamBridge.send("handlePurchase", purchase);
-        logger.info("send mail ok");
-
-    }
+//    @AfterReturning(value = "execution(* com.example.demo.facade.PurchaseFacade.placeOrder(..)) and args(purchase)")
+//    public void afterPurchaseSuccess(JoinPoint joinPoint, Purchase purchase)
+//    {
+//        logger.info("purchase success");
+//        for (CartItemDTO cartItem:purchase.getCartDTO().getCartItemDTOList()) {
+//            int quantity = cartItem.getQuantity();
+//            int quantityShop = productFeignClient.getQuantityById(cartItem.getProductId());
+//            int result = (quantityShop - quantity);
+//            productFeignClient.updateProductQuantityForId(result, cartItem.getProductId());
+//        }
+//        logger.info("update success");
+//        logger.info("send mail for customer");
+//        streamBridge.send("handlePurchase", purchase);
+//        logger.info("send mail ok");
+//
+//    }
 
 //    @AfterReturning(value = "execution(* com.example.demo.service.CartService.deliveryAndUpdate(..)) and args(orderNumber,token)")
 //    public void afterUpdateDelivered(JoinPoint joinPoint, String orderNumber,String token) throws Throwable {
@@ -95,59 +95,56 @@ public class AspectPurchase {
         //before
         long startTime = System.currentTimeMillis();
         logger.info("start Purchase");
+
         Object purchaseResponese = null;
 
-        if (purchase.getShippingAddress() != null
-                && purchase.getCartDTO().getUserOrder() != null
-                && purchase.getCartDTO().getCartItemDTOList() != null) {
-            //execution method placeOrder
-            purchaseResponese = joinPoint.proceed();
-
-            //after
-            if (purchase.getStatus().equalsIgnoreCase("FALSE"))
-            {
-                logger.info("send mail for admin info purchase false");
-                streamBridge.send("handleAfterOrderFalse", purchase);
-                logger.info("send mail ok");
-
-            }else
-            {
-                logger.info("Purchase Success");
-                for (CartItemDTO cartItem : purchase.getCartDTO().getCartItemDTOList()) {
-                    int quantity = cartItem.getQuantity();
-                    int quantityShop = productFeignClient.getQuantityById(cartItem.getProductId());
-                    int result = (quantityShop - quantity);
-                    productFeignClient.updateProductQuantityForId(result, cartItem.getProductId());
-                }
-                    logger.info("update success");
-
-                    logger.info("send mail for customer");
-//                Message<Purchase> purchaseMessage = MessageBuilder.withPayload(purchase).build();
-//                this.messageChannel.send(purchaseMessage);
-                    streamBridge.send("handlePurchase", purchase);
-                    logger.info("send mail ok");
-
-                    logger.info("send mail for admin ");
-                    streamBridge.send("handleAfterOrderSuccess", purchase);
-                    logger.info("send mail ok");
-
-                    logger.info("execution time handle purchase : " + ((System.currentTimeMillis() - startTime )/1000f));
-                    return purchaseResponese;
-
-            }
-
-        } else if (purchase.getCartDTO().getUserOrder() == null) {
+        if (purchase.getCartDTO().getUserOrder() == null) {
             logger.error(" User not null ");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if (purchase.getShippingAddress() == null) {
             logger.error(" Address not null ");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }else if (purchase.getShippingAddress() == null)
-        {
+        } else if (purchase.getShippingAddress() == null) {
             logger.error("Cart-Item  not null ");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            purchaseResponese = joinPoint.proceed();
+            if (purchase.getStatus().equalsIgnoreCase("FALSE")) {
+                purchase.getCartDTO().getUserOrder().setEmail("huynhhuy362022@gmail.com");
+                logger.info("send mail for admin info purchase false");
+                streamBridge.send("handlePurchase", purchase);
+                logger.info("send mail ok");
+
+            } else
+            {
+                logger.info("Purchase Success");
+                for (CartItemDTO cartItem : purchase.getCartDTO().getCartItemDTOList()) {
+                    if(cartItem.isCheck()==true) {
+                        int quantity = cartItem.getQuantity();
+                        int quantityShop = productFeignClient.getQuantityById(cartItem.getProductId());
+                        int result = (quantityShop - quantity);
+                        productFeignClient.updateProductQuantityForId(result, cartItem.getProductId());
+                    }
+                }
+                logger.info("update success");
+
+                logger.info("send mail for customer");
+                streamBridge.send("handlePurchase", purchase);
+                logger.info("send mail ok");
+
+                logger.info("send mail for admin ");
+                purchase.getCartDTO().getUserOrder().setEmail("huynhhuy362022@gmail.com");
+                streamBridge.send("handlePurchase", purchase);
+                logger.info("send mail ok");
+
+                logger.info("execution time handle purchase : " + ((System.currentTimeMillis() - startTime) / 1000f));
+
+                return purchaseResponese;
+            }
         }
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 }
 

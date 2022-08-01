@@ -29,7 +29,7 @@ public class CartDataSync {
     @Column(name = "date_order")
     private LocalDate dateOrder;
     private String shippingAddress;
-    private String userNameOrder;
+    private String userOrder;
     private String email;
     private Boolean isSending;
     private String voucher;

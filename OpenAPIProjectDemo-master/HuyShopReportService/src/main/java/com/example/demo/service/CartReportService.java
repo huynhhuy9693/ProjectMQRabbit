@@ -26,6 +26,9 @@ public class CartReportService {
     @Autowired
     ProductReportService productReportService;
 
+    @Autowired
+    CartService service;
+
     public void exPortToPDF(HttpServletResponse response) throws IOException {
         System.out.println("report");
 
@@ -54,8 +57,8 @@ public class CartReportService {
         String headerValue = "attachment; filename=cart-report_" + currentDateTime + ".pdf";
         response.setHeader(headerKey,headerValue);
         DecimalFormat formatter = new DecimalFormat("#,###.###");
-        List<CartDTO> cartDTOList = cartFeignClient.findByDateOrderBetween(startDate,lastDate,token);
-        String totalPrice = formatter.format(cartFeignClient.sumTotalPriceBetween(startDate,lastDate,token));
+        List<CartDTO> cartDTOList = service.findByDateOrderBetween(startDate,lastDate);
+        String totalPrice = formatter.format(service.sumTotalPriceBetween(startDate,lastDate));
         int month = startDate.getMonth().getValue();
         int year = startDate.getYear();
         int dayFrom = startDate.getDayOfMonth();

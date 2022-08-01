@@ -70,7 +70,7 @@ public class CartAdminController implements CartApi {
                                                      @RequestHeader("Authorization") String token)
     {
 
-        Long result = cartService.sumTotalPriceBetwenn(startDate,lastDate,token);
+        Long result = cartService.sumTotalPriceBetween(startDate,lastDate,token);
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 

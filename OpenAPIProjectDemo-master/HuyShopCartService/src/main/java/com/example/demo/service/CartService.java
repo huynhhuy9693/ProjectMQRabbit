@@ -116,7 +116,7 @@ public class CartService {
         return cartList;
     }
 
-    public Long sumTotalPriceBetwenn(LocalDate startDate, LocalDate lastDate,String token)
+    public Long sumTotalPriceBetween(LocalDate startDate, LocalDate lastDate,String token)
     {
         Long result = repository.sumByDateOrderBetween(startDate,lastDate);
         return result;
