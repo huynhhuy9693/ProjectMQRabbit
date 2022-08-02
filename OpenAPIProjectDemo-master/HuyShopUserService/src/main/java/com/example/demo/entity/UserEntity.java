@@ -2,6 +2,8 @@ package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Table(name = "user_tb")
+@Slf4j
 public class UserEntity {
 
     @Id
@@ -45,4 +48,5 @@ public class UserEntity {
             status=true;
         }
     }
+
 }

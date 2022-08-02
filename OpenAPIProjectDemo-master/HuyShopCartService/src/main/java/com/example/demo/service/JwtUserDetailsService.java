@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.UserOrder;
-import com.example.demo.model.JwtRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

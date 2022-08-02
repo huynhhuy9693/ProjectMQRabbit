@@ -2,7 +2,8 @@ package com.example.demo.entity;
 
 
 
-import com.example.demo.events.SaveCartEventListener;
+
+import com.example.demo.events.DeleteCartEventListener;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -22,7 +23,7 @@ import java.util.*;
 @Builder
 @Entity
 @Table(name = "cart")
-@EntityListeners(SaveCartEventListener.class)
+@EntityListeners(DeleteCartEventListener.class)
 public class CartEntity {
 
 

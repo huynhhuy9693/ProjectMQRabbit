@@ -35,4 +35,9 @@ public class CartService {
         Long result = cartRepository.sumByDateOrderBetween(startDate,lastDate);
         return result;
     }
+
+    public void delete(Long id)
+    {
+        cartRepository.deleteById(id);
+    }
 }

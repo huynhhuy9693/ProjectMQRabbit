@@ -27,9 +27,7 @@ public class HibernateListenerConfigurer {
 
         SessionFactoryImplementor sessionFactory= entityManagerFactory.unwrap(SessionFactoryImplementor.class);
         EventListenerRegistry eventListenerRegistry=sessionFactory.getServiceRegistry().getService(EventListenerRegistry.class);
-        eventListenerRegistry.getEventListenerGroup(EventType.PERSIST).appendListener(new SaveCartEventListener(streamBridge));
-        eventListenerRegistry.getEventListenerGroup(EventType.POST_UPDATE).appendListener(new UpdateCartEventListener(streamBridge));
-        eventListenerRegistry.getEventListenerGroup(EventType.POST_DELETE).appendListener(new DeleteCartEventListener(streamBridge));
+        eventListenerRegistry.getEventListenerGroup(EventType.POST_UPDATE).appendListener(new UpdateUserEventListener());
 
     }
 }

@@ -1,4 +1,4 @@
-//package com.example.demo.events;
+package com.example.demo.events;//package com.example.demo.events;
 //
 //import org.hibernate.boot.Metadata;
 //import org.hibernate.engine.spi.SessionFactoryImplementor;
@@ -15,7 +15,7 @@
 //        EventListenerRegistry eventListenerRegistry =
 //                sessionFactoryServiceRegistry.getService(EventListenerRegistry.class);
 //        eventListenerRegistry.getEventListenerGroup(EventType.POST_COMMIT_INSERT)
-//                .appendListener(new SaveCartEventListener());
+//                .appendListener(new SaveUserEventListener());
 //    }
 //
 //    @Override

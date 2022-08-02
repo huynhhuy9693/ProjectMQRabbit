@@ -7,9 +7,6 @@ import com.example.demo.dto.*;
 import com.example.demo.entity.CartEntity;
 import com.example.demo.entity.CartItemEntity;
 import com.example.demo.repository.CartRepository;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +64,7 @@ public class PurchaseFacade {
             purchase.setStatus("SUCCESS");
         }
             purchase.setStatus(purchase.getStatus());
+
         String oderNumber = generateOrderNumber(numberOfCharactor);
         cartDTO.setOderNumber(oderNumber);
 

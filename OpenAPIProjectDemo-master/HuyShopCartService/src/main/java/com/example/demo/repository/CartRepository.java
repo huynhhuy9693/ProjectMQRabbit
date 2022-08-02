@@ -22,8 +22,8 @@ CartRepository extends JpaRepository<CartEntity,Long> {
 
     CartEntity findByUserOrder(String userOrder);
 
+
     @Modifying
-    @Transactional
     @Query("Update CartEntity c set c.status=:status where c.oderNumber=:orderNumber")
     Integer updateStatusByOrdernumber(@Param("status") String status,@Param("orderNumber") String orderNumber);
 

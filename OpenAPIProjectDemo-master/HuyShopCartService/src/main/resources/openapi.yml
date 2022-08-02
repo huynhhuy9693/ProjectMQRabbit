@@ -266,8 +266,7 @@ components:
           description: price
           type: string
         oderNumber:
-          type: integer
-          format: int64
+          type: string
         status:
           type: string
         dateOrder:

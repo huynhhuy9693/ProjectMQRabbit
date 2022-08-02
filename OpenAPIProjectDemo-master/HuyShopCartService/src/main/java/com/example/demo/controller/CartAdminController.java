@@ -3,24 +3,19 @@ package com.example.demo.controller;
 
 import com.example.demo.api.CartApi;
 import com.example.demo.model.Cart;
-import com.example.demo.model.JwtRequest;
-import com.example.demo.model.JwtResponse;
 import com.example.demo.service.CartService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import java.net.http.HttpHeaders;
-import java.net.http.HttpRequest;
 import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/cart")
 public class CartAdminController implements CartApi {
@@ -75,12 +70,22 @@ public class CartAdminController implements CartApi {
     }
 
 
-    @PutMapping(value = "/delivery/update/{orderNumber}")
+    @PostMapping(value = "/delivery/update/{orderNumber}")
     public ResponseEntity<Void> deliveryAndUpdate(@PathVariable("orderNumber") String orderNumber,
                                                   @RequestHeader("Authorization") String token)
     {
-        cartService.deliveryAndUpdate(orderNumber,token);
+        cartService.deliveryAndUpdate(orderNumber);
         return  new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/cart/delete/{id}")
+    public ResponseEntity<Void> delete(@PathVariable ("id") Long id) {
+
+        String orderNumber = cartService.findById(id).getOderNumber();
+        log.info("Delete cart id: " + id);
+        cartService.delete(id, orderNumber);
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
     }
 
 

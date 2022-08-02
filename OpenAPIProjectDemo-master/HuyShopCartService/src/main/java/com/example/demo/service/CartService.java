@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.aspect.AspectPurchase;
 import com.example.demo.controller.CartAuthentication;
 import com.example.demo.dto.*;
 import com.example.demo.entity.CartEntity;
@@ -14,10 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.transaction.annotation.Transactional;
 
-
-import javax.transaction.Transactional;
 
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
@@ -123,19 +120,48 @@ public class CartService {
     }
 
 
-    public void deliveryAndUpdate(String orderNumber,String token)
+    @Transactional
+    public void deliveryAndUpdate(String orderNumber)
 
     {
         List<CartItemEntity> cartItemEntityList =cartItemRepository.findByOrdernumber(orderNumber);
+        CartEntity cart = repository.findByOderNumber(orderNumber);
         List<CartItemDTO> cartItemDTOLis = cartItemEntityList.stream().map(item->modelMapper.map(item, CartItemDTO.class)).collect(Collectors.toList());
-        for(CartItemDTO cartItemDTO: cartItemDTOLis)
+
+        if(cart.getStatus().equalsIgnoreCase("ORDER-SUCCESS"))
         {
-            int quantityDelivery = productFeignClient.getDeliveryById(cartItemDTO.getProductId());
-            int quantityCartItem = cartItemDTO.getQuantity();
-            int result = quantityDelivery+quantityCartItem;
-            productFeignClient.updateDeliveryForId(result, cartItemDTO.getProductId());
+            for(CartItemDTO cartItemDTO: cartItemDTOLis)
+            {
+                int quantityDelivery = productFeignClient.getDeliveryById(cartItemDTO.getProductId());
+                int quantityCartItem = cartItemDTO.getQuantity();
+                int result = quantityDelivery+quantityCartItem;
+                productFeignClient.updateDeliveryForId(result, cartItemDTO.getProductId());
+            }
+            logger.debug("status update :" +cart.getStatus());
+            cart.setStatus("DELIVERED");
+            repository.save(cart);
+        }else
+        {
+            logger.debug("status update :" +cart.getStatus());
+            cart.setStatus("SUCCESS");
+            repository.save(cart);
         }
-            repository.updateStatusByOrdernumber("DELIVERED", orderNumber);
+
+
+    }
+
+    public void delete(Long id,String orderNumber)
+    {
+        CartEntity cart = repository.findByOderNumber(orderNumber);
+        cart.setStatus("DELETE");
+        repository.deleteById(id);
+    }
+
+    public CartDTO findById(Long id)
+    {
+        Optional<CartEntity> cartEntity = repository.findById(id);
+        CartDTO cart = modelMapper.map(cartEntity,CartDTO.class);
+        return cart;
 
     }
 

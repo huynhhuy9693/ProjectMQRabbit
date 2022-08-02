@@ -28,15 +28,24 @@ public class DataSyncBinding {
     @StreamListener(target = CartBinding.DATA_SYNC_FROM_CART)
     public void dataSyncFromCart(CartDTO cartDTO)
     {
-        try
+
+        if(cartDTO.getStatus().equalsIgnoreCase("DELETE"))
         {
             logger.info("data-sync-from-cart");
-            CartDataSync cartDataSync = modelMapper.map(cartDTO, CartDataSync.class);
-            cartService.save(cartDataSync);
-            logger.info("data-sync-success");
-        }catch (Exception e)
+            cartService.delete(cartDTO.getId());
+            logger.info("Cart deleted successfully");
+        }else
         {
-            e.getCause().printStackTrace();
+            try
+            {
+                logger.info("data-sync-from-cart");
+                CartDataSync cartDataSync = modelMapper.map(cartDTO, CartDataSync.class);
+                cartService.save(cartDataSync);
+                logger.info("data-sync-success");
+            }catch (Exception e)
+            {
+                e.getCause().printStackTrace();
+            }
         }
 
     }
